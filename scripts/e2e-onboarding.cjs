@@ -125,6 +125,14 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
   for (const h of ['ลองใช้ใน 5 นาที', 'ใช้กับโรงเรียนจริง', 'คำศัพท์ที่ควรรู้', 'ถามตอบ', 'คู่มือฉบับ PDF']) {
     assert(await p.getByRole('heading', { level: 2, name: new RegExp(h) }).isVisible(), `หน้าวิธีใช้: มีหัวข้อ "${h}"`);
   }
+  assert((await p.locator('details.man-sec').count()) === 12, 'คู่มือฉบับเต็มมี 12 หัวข้อ');
+  assert((await p.locator('details.man-sec[open]').count()) === 0, 'เริ่มต้นย่อไว้ทุกหัวข้อ');
+  await p.locator('.man-toc button', { hasText: 'กรณีพิเศษ' }).first().click();
+  await p.locator('#man-special[open]').waitFor();
+  assert(await p.locator('#man-special').getByText('ทุกวันคาบที่ 1').first().isVisible(), 'กดสารบัญ -> หัวข้อ "กรณีพิเศษ" กางพร้อมตารางตัวอย่าง');
+  await p.locator('.man-toc button', { hasText: 'กางทั้งหมด' }).click();
+  assert((await p.locator('details.man-sec[open]').count()) === 12, '"กางทั้งหมด" กางครบ 12 หัวข้อ');
+  assert(await p.locator('#man-trouble').getByText('เปิดเว็บแล้วข้อมูลหาย').isVisible(), 'หัวข้อแก้ปัญหามีตารางอาการ-สาเหตุ-วิธีแก้');
   assert((await p.locator('.help-faq').count()) >= 8, `ถามตอบ ${await p.locator('.help-faq').count()} ข้อ`);
   const faq = p.locator('.help-faq').first();
   await faq.locator('summary').click();
@@ -146,6 +154,7 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
   await m.page.screenshot({ path: `${OUT}/04-mobile-guide.png`, fullPage: true });
   await m.page.locator('.nav a', { hasText: 'วิธีใช้' }).click();
   await m.page.getByRole('heading', { level: 1, name: 'วิธีใช้' }).waitFor();
+  await m.page.locator('.man-toc button', { hasText: 'กางทั้งหมด' }).click();
   const over2 = await m.page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert(over2 <= 2, `มือถือ: หน้าวิธีใช้ไม่เลื่อนแนวนอน (เกิน ${over2}px)`);
 

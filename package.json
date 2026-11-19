@@ -3,7 +3,7 @@
   "private": true,
   "description": "ระบบจัดตารางสอนอัตโนมัติ (เว็บแอป ทำงานในเบราว์เซอร์ ไม่ต้องมีเซิร์ฟเวอร์)",
   "license": "MIT",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
