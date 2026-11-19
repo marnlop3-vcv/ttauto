@@ -42,11 +42,12 @@ const server = http.createServer((req, res) => {
   await A.page.goto(root);
   assert(await A.page.getByRole('button', { name: 'เข้าสู่ระบบ' }).isVisible(), 'ผู้ใช้ใหม่เห็นหน้าเข้าสู่ระบบ');
   await A.page.getByRole('button', { name: /ใช้งานเป็นผู้ดูแล/ }).click();
-  assert(await A.page.getByText('ก่อนเริ่มใช้ — 3 ข้อควรรู้').isVisible(), 'ผู้ใช้ใหม่เห็นข้อความต้อนรับ (3 ข้อควรรู้)');
+  assert(await A.page.locator('.guide').isVisible(), 'ผู้ใช้ใหม่เห็นการ์ดเริ่มต้นใช้งาน');
   assert(await A.page.locator('.site-foot').getByText(/MIT/).isVisible(), 'ท้ายหน้ามีเวอร์ชัน/สัญญาอนุญาต');
-  await A.page.getByRole('button', { name: 'รับทราบ' }).click();
   await A.page.reload();
-  assert(!(await A.page.getByText('ก่อนเริ่มใช้ — 3 ข้อควรรู้').isVisible()), 'ปิดข้อความแล้วจำไว้ ไม่ขึ้นอีก');
+  await A.page.locator('.guide').getByRole('button', { name: /ย่อ/ }).click();
+  await A.page.reload();
+  assert(await A.page.locator('.guide-bar').isVisible() && !(await A.page.locator('.guide').isVisible()), 'ย่อการ์ดนำทางแล้วจำไว้ รีเฟรชยังย่ออยู่');
 
   await A.page.locator('.nav a', { hasText: 'กรอกข้อมูล' }).click();
   await A.page.getByRole('button', { name: /^เล็ก/ }).click();
@@ -57,7 +58,7 @@ const server = http.createServer((req, res) => {
   assert(true, 'ที่ซับโฟลเดอร์ /timetable-app/: โหลดข้อมูลตัวอย่างและจัดตารางผ่าน Web Worker สำเร็จ');
 
   // คู่มือ PDF และไอคอนโหลดได้
-  const hrefPdf = await A.page.locator('.site-foot a').getAttribute('href');
+  const hrefPdf = await A.page.locator('.site-foot a').first().getAttribute('href');
   const pdf = await A.page.request.get(new URL(hrefPdf, A.page.url()).toString());
   assert(pdf.status() === 200 && (await pdf.body()).slice(0, 4).toString() === '%PDF', `ลิงก์คู่มือ PDF ใช้ได้ (${hrefPdf})`);
   const fav = await A.page.request.get(root + 'favicon.svg');
@@ -71,7 +72,7 @@ const server = http.createServer((req, res) => {
   await B.page.locator('.tabs button', { hasText: /^กลุ่มเรียน$/ }).click();
   assert(await B.page.getByText('กลุ่มเรียนที่มีอยู่ในระบบ (0)').isVisible(), 'ผู้ใช้ B (เบราว์เซอร์อื่น) เห็นข้อมูลว่าง — ไม่ปนกับของ A');
   await B.page.locator('.nav a', { hasText: 'Dashboard' }).click();
-  assert(await B.page.getByText('ยังไม่ได้ตั้งค่าวันและคาบเรียน').isVisible(), 'Dashboard ของ B ยังไม่มีตาราง');
+  assert(await B.page.locator('.guide').getByText('ทำแล้ว 0/4').isVisible(), 'Dashboard ของ B ยังไม่มีตาราง (การ์ดเริ่มต้น 0/4)');
   // และ A ยังมีข้อมูลเดิม
   await A.page.locator('.nav a', { hasText: 'กรอกข้อมูล' }).click();
   await A.page.locator('.tabs button', { hasText: /^กลุ่มเรียน$/ }).click();

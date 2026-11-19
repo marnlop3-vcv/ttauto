@@ -230,3 +230,53 @@ table.tt td[colspan] .item.class { background: #dfeaf6; border-left: 4px solid v
   .grid-title { position: sticky; left: 0; text-align: left; width: calc(100vw - 90px); }
   .summary { position: sticky; left: 0; width: calc(100vw - 90px); }
 }
+
+/* ===== การ์ดเริ่มต้นใช้งาน / วิธีใช้ ===== */
+.guide { border-color: #c9d7e6; background: #fbfdff; }
+.guide-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.guide-progress { height: 8px; background: #e4eaf1; border-radius: 99px; overflow: hidden; margin: 10px 0 14px; }
+.guide-progress > div { height: 100%; background: var(--ok); transition: width .3s; }
+.guide-try { display: flex; gap: 14px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+.guide-steps { list-style: none; margin: 0; padding: 0; }
+.gs { display: flex; gap: 12px; align-items: flex-start; padding: 10px 8px; border-radius: 10px; border-top: 1px solid var(--line); }
+.gs:first-child { border-top: 0; }
+.gs.current { background: #eef4fb; border: 1px solid #bcd0e6; }
+.gs-mark { flex: 0 0 30px; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; background: #e4eaf1; color: var(--muted); font-weight: 700; }
+.gs.current .gs-mark { background: var(--accent); color: #fff; }
+.gs.done .gs-mark { background: var(--ok-soft); color: var(--ok); }
+.gs.done .gs-title { color: var(--muted); }
+.gs-body { flex: 1; min-width: 0; }
+.gs-title { font-weight: 600; }
+.gs-next { margin-left: 8px; font-size: 12px; background: var(--accent); color: #fff; border-radius: 99px; padding: 1px 9px; }
+.gs-hint { color: var(--muted); font-size: 14px; }
+.gs-subs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.gs-sub { font-size: 13px; padding: 2px 10px; border-radius: 99px; background: #fff; border: 1px solid var(--line); color: var(--accent-dark); text-decoration: none; }
+.gs-sub.done { background: var(--ok-soft); border-color: transparent; color: var(--ok); }
+.gs-edit { font-size: 13px; color: var(--muted); align-self: center; }
+.gs.optional { opacity: .9; }
+.guide-facts { margin-top: 10px; font-size: 14px; color: var(--muted); }
+.guide-facts summary { cursor: pointer; font-weight: 600; color: var(--ink); }
+.guide-facts ul { margin: 6px 0; padding-left: 20px; }
+.guide-bar, .guide-done { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; margin-bottom: 14px; background: #fbfdff; }
+.guide-done { background: var(--ok-soft); border-color: transparent; color: var(--ok); }
+.guide-done-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+a.btn { text-decoration: none; display: inline-block; }
+a.btn.primary { color: #fff; }
+.help-steps { list-style: none; padding: 0; margin: 10px 0; }
+.help-steps li { display: flex; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); }
+.help-steps li:first-child { border-top: 0; }
+.help-no { flex: 0 0 28px; width: 28px; height: 28px; line-height: 28px; border-radius: 50%; text-align: center; background: var(--accent); color: #fff; font-weight: 700; font-size: 14px; }
+.help-title { font-weight: 600; }
+.help-meta { font-size: 14px; color: var(--muted); }
+.help-gloss > div { padding: 8px 0; border-top: 1px solid var(--line); }
+.help-gloss > div:first-child { border-top: 0; }
+.help-gloss dt { font-weight: 600; }
+.help-gloss dd { margin: 2px 0 0; color: var(--muted); }
+.help-faq { border-top: 1px solid var(--line); padding: 8px 0; }
+.help-faq summary { cursor: pointer; font-weight: 600; }
+.help-faq p { margin: 6px 0 0; color: var(--ink); }
+.viewer-help { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
+.viewer-help details { padding: 6px 0; }
+.viewer-help summary { cursor: pointer; font-weight: 600; color: var(--accent-dark); }
+.viewer-help ol, .viewer-help ul { margin: 6px 0; padding-left: 20px; }
+@media (max-width: 820px) { .gs { flex-wrap: wrap; } .gs .btn { margin-left: 42px; } }

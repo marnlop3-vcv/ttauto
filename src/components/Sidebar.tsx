@@ -14,6 +14,7 @@ export default function Sidebar() {
         <NavLink to="/" end><span className="ico">▦</span> Dashboard</NavLink>
         <NavLink to="/input"><span className="ico">✎</span> กรอกข้อมูล</NavLink>
         <NavLink to="/publish"><span className="ico">⇪</span> เผยแพร่ตาราง</NavLink>
+        <NavLink to="/help"><span className="ico">?</span> วิธีใช้</NavLink>
       </nav>
       <div className="side-user">
         <span className="role-badge">ผู้ดูแล</span>

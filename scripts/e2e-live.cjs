@@ -52,9 +52,8 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
 
   // ===== 2) ผู้ดูแล: ข้อมูลตัวอย่างเล็ก + จัดตาราง (Web Worker บนโดเมนจริง) =====
   await p.getByRole('button', { name: /ใช้งานเป็นผู้ดูแล/ }).click();
-  assert(await p.getByText('ก่อนเริ่มใช้ — 3 ข้อควรรู้').isVisible(), 'ผู้ดูแล: เห็นข้อความต้อนรับ');
+  assert(await p.locator('.guide').getByText('เริ่มต้นใช้งาน').isVisible(), 'ผู้ดูแล: เห็นการ์ดเริ่มต้นใช้งาน');
   assert(await p.locator('.site-foot').innerText().then((t) => /v1\.5\.0/.test(t) && /MIT/.test(t)), 'ท้ายหน้า: เวอร์ชัน 1.5.0 และ MIT');
-  await p.getByRole('button', { name: 'รับทราบ' }).click();
   await p.locator('.nav a', { hasText: 'กรอกข้อมูล' }).click();
   await p.getByRole('button', { name: /^เล็ก/ }).click();
   await p.locator('.nav a', { hasText: 'Dashboard' }).click();
@@ -66,7 +65,7 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
   await p.screenshot({ path: `${OUT}/02-dashboard.png`, fullPage: true });
 
   // คู่มือ PDF จากลิงก์ท้ายหน้า
-  const href = await p.locator('.site-foot a').getAttribute('href');
+  const href = await p.locator('.site-foot a').first().getAttribute('href');
   const pdfRes = await p.request.get(new URL(href, p.url()).toString());
   const pdfBody = await pdfRes.body();
   assert(pdfRes.status() === 200 && pdfBody.slice(0, 4).toString() === '%PDF', `ลิงก์คู่มือ PDF ใช้ได้ (${Math.round(pdfBody.length / 1024)} KB)`);
@@ -198,7 +197,6 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
   const M2 = mob2.page;
   await M2.goto(URL_ROOT);
   await M2.getByRole('button', { name: /ใช้งานเป็นผู้ดูแล/ }).click();
-  await M2.getByRole('button', { name: 'รับทราบ' }).click();
   await M2.screenshot({ path: `${OUT}/06-mobile-admin.png` });
   const g2 = await M2.evaluate(() => {
     const vw = window.innerWidth;

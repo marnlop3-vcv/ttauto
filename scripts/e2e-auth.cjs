@@ -194,7 +194,7 @@ const server = http.createServer((req, res) => {
   await F.getByText(/ยังไม่มีตารางที่เผยแพร่ในเว็บนี้/).waitFor({ timeout: 15000 });
   assert(true, 'ไม่มีไฟล์เผยแพร่ -> แจ้ง "ยังไม่มีตารางที่เผยแพร่"');
   await F.locator('input[type=file]').setInputFiles(PUB);
-  await F.getByText(/ไฟล์ published\.enc\.json/).waitFor({ timeout: 10000 });
+  await F.getByText(/พบตารางที่เผยแพร่ \(ไฟล์ published/).waitFor({ timeout: 10000 });
   await F.getByLabel('รหัสผ่าน').fill(SP);
   await F.getByRole('button', { name: 'เข้าสู่ระบบ' }).click();
   await F.getByRole('heading', { level: 1, name: /ตารางเรียน/ }).waitFor({ timeout: 15000 });
@@ -210,7 +210,7 @@ const server = http.createServer((req, res) => {
   const g = await newUser();
   await g.page.goto(root);
   await g.page.getByRole('button', { name: /ใช้งานเป็นผู้ดูแล/ }).click();
-  assert(await g.page.getByText('ก่อนเริ่มใช้ — 3 ข้อควรรู้').isVisible() && await g.page.locator('.nav a', { hasText: 'เผยแพร่ตาราง' }).isVisible(), 'ผู้ใช้ทั่วไปกด "ใช้งานเป็นผู้ดูแล" ใช้เป็นเครื่องมือของตัวเองได้ตามเดิม');
+  assert(await g.page.locator('.guide').isVisible() && await g.page.locator('.nav a', { hasText: 'เผยแพร่ตาราง' }).isVisible(), 'ผู้ใช้ทั่วไปกด "ใช้งานเป็นผู้ดูแล" ใช้เป็นเครื่องมือของตัวเองได้ตามเดิม');
 
   assert(errors.length === 0, 'ไม่มี console/page error ' + errors.slice(0, 3).join(' | '));
   await browser.close();

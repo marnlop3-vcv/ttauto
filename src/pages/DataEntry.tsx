@@ -1,4 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { isTabKey, TabKey, tabKeyToName } from '../lib/guide';
 import { buildingDef, groupDef, roleLabel, subjectDef, teacherDef } from '../lib/entities';
 import { makeSample, SAMPLE_LABEL, SampleInfo, sampleInfo, SampleSize } from '../lib/sample';
 import { downloadBlob } from '../lib/excel';
@@ -13,7 +15,16 @@ const TABS = ['ตั้งค่าคาบเรียน', 'ครู', 'ก
 type Tab = (typeof TABS)[number];
 
 export default function DataEntry() {
-  const [tab, setTab] = useState<Tab>('ตั้งค่าคาบเรียน');
+  const [params, setParams] = useSearchParams();
+  const fromUrl = params.get('tab');
+  const [tab, setTab] = useState<Tab>(isTabKey(fromUrl) ? tabKeyToName[fromUrl] : 'ตั้งค่าคาบเรียน');
+  // ลิงก์จากตัวนำทาง (#/input?tab=teachers) สลับแท็บให้; เมื่อกดแท็บเองก็บันทึกลงที่อยู่ เพื่อให้ลิงก์ซ้ำยังทำงาน
+  useEffect(() => { if (isTabKey(fromUrl)) setTab(tabKeyToName[fromUrl]); }, [fromUrl]);
+  const selectTab = (t: Tab) => {
+    setTab(t);
+    const key = (Object.keys(tabKeyToName) as TabKey[]).find((k) => tabKeyToName[k] === t);
+    if (key) setParams({ tab: key }, { replace: true });
+  };
   const st = useStore();
   const restore = useRef<HTMLInputElement>(null);
   const infos = useMemo(() => Object.fromEntries((['small', 'medium', 'large'] as SampleSize[]).map((z) => [z, sampleInfo(z)])) as Record<SampleSize, SampleInfo>, []);
@@ -59,7 +70,7 @@ export default function DataEntry() {
         </div>
       </div>
       <div className="tabs">
-        {TABS.map((t) => <button key={t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>{t}</button>)}
+        {TABS.map((t) => <button key={t} className={tab === t ? 'on' : ''} onClick={() => selectTab(t)}>{t}</button>)}
       </div>
 
       {tab === 'ตั้งค่าคาบเรียน' && <SettingsTab />}

@@ -73,7 +73,7 @@ async function makeFixtures() {
   }, text);
 
   await page.goto('http://localhost:4173/#/');
-  assert(await page.getByText('ยังไม่ได้ตั้งค่าวันและคาบเรียน').isVisible(), 'Dashboard แจ้งให้ตั้งค่าก่อน');
+  assert(await page.locator('.guide').getByText('เริ่มต้นใช้งาน').isVisible() && await page.locator('.guide').getByText('ทำแล้ว 0/4').isVisible(), 'Dashboard ผู้ใช้ใหม่: การ์ดเริ่มต้นใช้งาน (ทำแล้ว 0/4)');
 
   // ---- ตั้งค่าคาบ ----
   await nav('กรอกข้อมูล');

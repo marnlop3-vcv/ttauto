@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><title>วิธีดูตารางเรียน/ตารางสอน (นักเรียนและครู)</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/sarabun/400.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/sarabun/600.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/sarabun/700.css">
+<link rel="stylesheet" href="doc.css">
+<style>
+  .page { padding: 13mm 15mm; }
+  h1 { font-size: 24pt; } .big { font-size: 12.5pt; }
+  .step { display:flex; gap:10px; align-items:flex-start; margin:9px 0; }
+  .step .n { flex:0 0 28px; width:28px; height:28px; line-height:28px; font-size:13pt; text-align:center; }
+  .step b { font-size: 12pt; }
+  .phones { display:grid; grid-template-columns: 1fr 1fr; gap:14px; align-items:start; }
+  .phones .shot { border-radius: 14px; }
+  .small { font-size: 9.6pt; }
+</style></head><body>
+<section class="page">
+  <div class="band"><div><h1>วิธีดูตารางเรียน / ตารางสอน</h1><p class="sub">สำหรับนักเรียนและครู — ใช้เวลาไม่ถึง 1 นาที</p></div></div>
+
+  <div class="cols" style="grid-template-columns: 0.95fr 1.05fr; gap:16px">
+    <div>
+      <div class="step"><span class="n blue">1</span><div><b>เปิดลิงก์ที่ผู้ดูแลส่งให้</b><br>ใช้ได้ทั้งมือถือและคอมพิวเตอร์ ไม่ต้องติดตั้งหรือสมัครอะไร</div></div>
+      <div class="step"><span class="n blue">2</span><div><b>ใส่รหัสที่ได้รับ</b> แล้วกด <b>เข้าสู่ระบบ</b><br><span class="small">นักเรียนใช้รหัสนักเรียน ครูใช้รหัสครู (ใช้สลับกันไม่ได้) พิมพ์ตัวเล็กหรือไม่ใส่ขีดก็ได้</span></div></div>
+      <div class="step"><span class="n blue">3</span><div><b>เลือกกลุ่มเรียน (นักเรียน) หรือเลือกครู (ครู)</b><br>ดูตารางได้ทันที หรือกด <b>Export PDF</b> เก็บไว้ดูภายหลัง</div></div>
+      <div class="box info small"><b>ปิดหน้าเว็บแล้ว</b> ต้องใส่รหัสใหม่ทุกครั้ง • ถ้าตารางเปลี่ยน ผู้ดูแลจะแจ้ง แล้วให้รีเฟรชหน้าเว็บ ดูวันเวลา "เผยแพร่เมื่อ" บนหน้าจอว่าเป็นล่าสุด</div>
+    </div>
+    <div class="phones">
+      <div><img class="shot" src="shots/m-login.png" alt="หน้าใส่รหัส"><p class="cap">①②③ หน้าใส่รหัส</p></div>
+      <div><img class="shot" src="shots/m-viewer.png" alt="หน้าดูตาราง"><p class="cap">④⑤ เลือกห้อง / Export</p></div>
+    </div>
+  </div>
+
+  <h2>ได้รับ "ไฟล์ตาราง" ทางไลน์หรืออีเมล?</h2>
+  <p class="small">ถ้าผู้ดูแลส่งเป็นไฟล์ชื่อ <code>published.enc.json</code> มาให้ ไฟล์นี้ <b>ไม่ต้องเปิดอ่าน</b> (เห็นเป็นตัวอักษรแปลกๆ เป็นเรื่องปกติ เพราะเข้ารหัสไว้) ให้ใช้ผ่านหน้าเว็บ:</p>
+  <div class="cols c2">
+    <div class="box info small"><b>Android</b>
+      <ol>
+        <li>ในไลน์ กดที่ไฟล์ให้ดาวน์โหลด แล้วเลือก <b>บันทึก</b> (ถ้าไม่เห็น ให้เลือก แชร์ › บันทึกลงไฟล์)</li>
+        <li>เปิดเว็บ กด <b>"มีไฟล์ตารางที่ได้รับ? เลือกไฟล์"</b></li>
+        <li>เลือกโฟลเดอร์ <b>ดาวน์โหลด</b> › ไฟล์ที่บันทึก แล้วใส่รหัส</li>
+      </ol>
+    </div>
+    <div class="box info small"><b>iPhone</b>
+      <ol>
+        <li>ในไลน์ กดที่ไฟล์ › ไอคอนแชร์ › <b>บันทึกไปยังไฟล์</b> (ต้องทำก่อน ไม่งั้นหน้าเว็บมองไม่เห็นไฟล์)</li>
+        <li>เปิดเว็บใน Safari กด <b>"มีไฟล์ตารางที่ได้รับ? เลือกไฟล์"</b></li>
+        <li>เลือก <b>เรียกดู</b> › ไฟล์ที่บันทึกไว้ แล้วใส่รหัส</li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>ใส่รหัสแล้วขึ้น "รหัสไม่ถูกต้อง"</h2>
+  <ul class="small">
+    <li>นักเรียนใช้ <b>รหัสนักเรียน</b> ครูใช้ <b>รหัสครู</b> ใช้สลับกันไม่ได้</li>
+    <li>เช็กตัวอักษรให้ตรง (รหัสแบบ <code>ABCD-EFGH-JKLM</code> พิมพ์ตัวเล็กหรือไม่ใส่ขีดได้ แต่รหัสที่ผู้ดูแลตั้งเองแยกตัวพิมพ์เล็ก/ใหญ่)</li>
+    <li>ถ้าผู้ดูแลเพิ่งเปลี่ยนรหัส ให้ขอรหัสและไฟล์ตารางล่าสุด (รหัสใหม่ใช้กับไฟล์เก่าไม่ได้)</li>
+  </ul>
+  <div class="box tip small"><b>ข้อมูลของคุณปลอดภัย:</b> หน้านี้ดูตารางได้อย่างเดียว แก้ไขอะไรไม่ได้ และไม่เก็บข้อมูลส่วนตัวของคุณ ติดปัญหา สอบถามผู้ดูแลตารางของโรงเรียน</div>
+  <div class="foot"><span>วิธีดูตารางเรียน/ตารางสอน — สำหรับนักเรียนและครู</span><span>ระบบจัดตารางสอนอัตโนมัติ</span></div>
+</section>
+</body></html>

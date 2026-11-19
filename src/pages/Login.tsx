@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import ViewerHelp from '../components/HelpPanel';
 import { SiteFooter } from '../components/Notice';
 import { hasAdminLock, resetThisDevice, verifyAdminLock } from '../auth/adminLock';
 import { FetchResult, fetchPublished, openPublished, PublishedFile, readPublishedFromFile } from '../auth/bundle';
@@ -86,7 +87,7 @@ export default function Login() {
         </div>
 
         <div className="login-more">
-          <input ref={fileRef} type="file" accept=".json,application/json" hidden onChange={(e) => e.target.files?.[0] && pickFile(e.target.files[0])} />
+          <input ref={fileRef} type="file" hidden onChange={(e) => e.target.files?.[0] && pickFile(e.target.files[0])} />
           <button type="button" className="link" onClick={() => fileRef.current?.click()}>มีไฟล์ตารางที่ได้รับ (published.enc.json)? เลือกไฟล์</button>
           {!lock ? (
             <button type="button" className="btn login-admin" onClick={loginAdmin}>ใช้งานเป็นผู้ดูแล (จัดตารางเอง)</button>
@@ -98,6 +99,7 @@ export default function Login() {
             </details>
           )}
         </div>
+        <ViewerHelp />
       </div>
       <SiteFooter />
     </div>

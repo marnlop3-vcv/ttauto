@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import GettingStarted from '../components/GettingStarted';
 import { SearchSelect } from '../components/Search';
 import TimetableGrid from '../components/TimetableGrid';
 import { exportTimetableExcel } from '../lib/excel';
@@ -74,11 +74,7 @@ export default function Dashboard() {
       <h1>Dashboard</h1>
       <p className="page-sub">ดูตารางสอนตามครู กลุ่มเรียน หรืออาคาร และส่งออกเป็น PDF / Excel</p>
 
-      {!configured && (
-        <div className="msg warn" style={{ marginTop: 0, marginBottom: 18 }}>
-          ยังไม่ได้ตั้งค่าวันและคาบเรียน — <Link to="/input">ไปที่ กรอกข้อมูล › ตั้งค่าคาบเรียน</Link> (หรือกด "โหลดข้อมูลตัวอย่าง" เพื่อลองใช้งาน)
-        </div>
-      )}
+      <GettingStarted onRun={run} canRun={configured && hasWork && !busy} running={running} />
 
       <div className="card">
         <div className="toolbar">
