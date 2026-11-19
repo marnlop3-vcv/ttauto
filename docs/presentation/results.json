@@ -1,0 +1,664 @@
+{
+  "generatedAt": "2026-11-19T07:28:39.889Z",
+  "machine": {
+    "cpus": 4,
+    "model": "Intel(R) Xeon(R) Processor @ 2.10GHz"
+  },
+  "node": "v22.23.5",
+  "weights": {
+    "gapGroup": 8,
+    "gapTeacher": 2,
+    "overload": 3,
+    "loadGroup": 0.4,
+    "loadTeacher": 0.15,
+    "spread": 2,
+    "start": 0.03
+  },
+  "anneal": {
+    "t0": 2,
+    "t1": 0.03,
+    "moves": {
+      "relocate": 0.45,
+      "shift": 0.3,
+      "swap": 0.25
+    }
+  },
+  "runs": [
+    {
+      "size": "small",
+      "seed": 1,
+      "groups": 4,
+      "subjects": 6,
+      "teachers": 8,
+      "buildings": 2,
+      "periodsTotal": 64,
+      "limitSec": 5,
+      "placed": 64,
+      "totalUnits": 64,
+      "unplaced": 0,
+      "merged": 1,
+      "conflicts": 0,
+      "warnings": 0,
+      "specials": 9,
+      "firstCompleteSec": 0.03,
+      "totalSec": 2.25,
+      "iterations": 6495744,
+      "cost": {
+        "initial": 261.8,
+        "final": 226.9
+      },
+      "before": {
+        "groupGaps": 1,
+        "teacherGaps": 38,
+        "overload": 0
+      },
+      "after": {
+        "groupGaps": 0,
+        "teacherGaps": 25,
+        "overload": 0
+      },
+      "curve": [
+        {
+          "t": 0.03,
+          "cost": 251.6,
+          "unplaced": 0
+        },
+        {
+          "t": 0.23,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 0.43,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 0.63,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 0.83,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 1.03,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 1.23,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 1.43,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 1.63,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 1.83,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 2.03,
+          "cost": 226.9,
+          "unplaced": 0
+        },
+        {
+          "t": 2.23,
+          "cost": 226.9,
+          "unplaced": 0
+        }
+      ]
+    },
+    {
+      "size": "small",
+      "seed": 2,
+      "groups": 4,
+      "subjects": 6,
+      "teachers": 8,
+      "buildings": 2,
+      "periodsTotal": 64,
+      "limitSec": 5,
+      "placed": 64,
+      "totalUnits": 64,
+      "unplaced": 0,
+      "merged": 1,
+      "conflicts": 0,
+      "warnings": 0,
+      "specials": 9,
+      "firstCompleteSec": 0.03,
+      "totalSec": 2.25,
+      "iterations": 6860800,
+      "cost": {
+        "initial": 265.6,
+        "final": 228.8
+      },
+      "before": {
+        "groupGaps": 3,
+        "teacherGaps": 34,
+        "overload": 0
+      },
+      "after": {
+        "groupGaps": 1,
+        "teacherGaps": 22,
+        "overload": 0
+      },
+      "curve": [
+        {
+          "t": 0.03,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 0.23,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 0.43,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 0.63,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 0.83,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 1.03,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 1.23,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 1.43,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 1.63,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 1.83,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 2.03,
+          "cost": 228.8,
+          "unplaced": 0
+        },
+        {
+          "t": 2.23,
+          "cost": 228.8,
+          "unplaced": 0
+        }
+      ]
+    },
+    {
+      "size": "medium",
+      "seed": 1,
+      "groups": 12,
+      "subjects": 9,
+      "teachers": 23,
+      "buildings": 3,
+      "periodsTotal": 264,
+      "limitSec": 10,
+      "placed": 264,
+      "totalUnits": 264,
+      "unplaced": 0,
+      "merged": 6,
+      "conflicts": 0,
+      "warnings": 0,
+      "specials": 9,
+      "firstCompleteSec": 0.03,
+      "totalSec": 4.64,
+      "iterations": 14266880,
+      "cost": {
+        "initial": 1069.5,
+        "final": 968
+      },
+      "before": {
+        "groupGaps": 13,
+        "teacherGaps": 137,
+        "overload": 0
+      },
+      "after": {
+        "groupGaps": 5,
+        "teacherGaps": 119,
+        "overload": 0
+      },
+      "curve": [
+        {
+          "t": 0.03,
+          "cost": 1026.5,
+          "unplaced": 0
+        },
+        {
+          "t": 0.43,
+          "cost": 976.9,
+          "unplaced": 0
+        },
+        {
+          "t": 0.83,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 1.23,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 1.63,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 2.03,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 2.43,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 2.83,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 3.23,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 3.63,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 4.03,
+          "cost": 968,
+          "unplaced": 0
+        },
+        {
+          "t": 4.43,
+          "cost": 968,
+          "unplaced": 0
+        }
+      ]
+    },
+    {
+      "size": "medium",
+      "seed": 2,
+      "groups": 12,
+      "subjects": 9,
+      "teachers": 23,
+      "buildings": 3,
+      "periodsTotal": 264,
+      "limitSec": 10,
+      "placed": 264,
+      "totalUnits": 264,
+      "unplaced": 0,
+      "merged": 6,
+      "conflicts": 0,
+      "warnings": 0,
+      "specials": 9,
+      "firstCompleteSec": 0.03,
+      "totalSec": 5.37,
+      "iterations": 16111872,
+      "cost": {
+        "initial": 1062.6,
+        "final": 962.8
+      },
+      "before": {
+        "groupGaps": 11,
+        "teacherGaps": 134,
+        "overload": 0
+      },
+      "after": {
+        "groupGaps": 5,
+        "teacherGaps": 116,
+        "overload": 0
+      },
+      "curve": [
+        {
+          "t": 0.03,
+          "cost": 1000.6,
+          "unplaced": 0
+        },
+        {
+          "t": 0.43,
+          "cost": 968.4,
+          "unplaced": 0
+        },
+        {
+          "t": 0.83,
+          "cost": 964.8,
+          "unplaced": 0
+        },
+        {
+          "t": 1.23,
+          "cost": 964.8,
+          "unplaced": 0
+        },
+        {
+          "t": 1.63,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 2.03,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 2.43,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 2.83,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 3.24,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 3.64,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 4.04,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 4.44,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 4.84,
+          "cost": 962.8,
+          "unplaced": 0
+        },
+        {
+          "t": 5.24,
+          "cost": 962.8,
+          "unplaced": 0
+        }
+      ]
+    },
+    {
+      "size": "large",
+      "seed": 1,
+      "groups": 30,
+      "subjects": 10,
+      "teachers": 54,
+      "buildings": 6,
+      "periodsTotal": 720,
+      "limitSec": 20,
+      "placed": 720,
+      "totalUnits": 720,
+      "unplaced": 0,
+      "merged": 15,
+      "conflicts": 0,
+      "warnings": 0,
+      "specials": 9,
+      "firstCompleteSec": 0.03,
+      "totalSec": 12.71,
+      "iterations": 35778304,
+      "cost": {
+        "initial": 3124.3,
+        "final": 2812.5
+      },
+      "before": {
+        "groupGaps": 57,
+        "teacherGaps": 349,
+        "overload": 0
+      },
+      "after": {
+        "groupGaps": 30,
+        "teacherGaps": 287,
+        "overload": 0
+      },
+      "curve": [
+        {
+          "t": 0.03,
+          "cost": 2949.6,
+          "unplaced": 0
+        },
+        {
+          "t": 0.83,
+          "cost": 2841,
+          "unplaced": 0
+        },
+        {
+          "t": 1.63,
+          "cost": 2826.2,
+          "unplaced": 0
+        },
+        {
+          "t": 2.43,
+          "cost": 2821.7,
+          "unplaced": 0
+        },
+        {
+          "t": 3.23,
+          "cost": 2816.7,
+          "unplaced": 0
+        },
+        {
+          "t": 4.04,
+          "cost": 2815.8,
+          "unplaced": 0
+        },
+        {
+          "t": 4.84,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 5.64,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 6.44,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 7.24,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 8.05,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 8.85,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 9.65,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 10.45,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 11.25,
+          "cost": 2812.5,
+          "unplaced": 0
+        },
+        {
+          "t": 12.05,
+          "cost": 2812.5,
+          "unplaced": 0
+        }
+      ]
+    },
+    {
+      "size": "large",
+      "seed": 2,
+      "groups": 30,
+      "subjects": 10,
+      "teachers": 54,
+      "buildings": 6,
+      "periodsTotal": 720,
+      "limitSec": 20,
+      "placed": 720,
+      "totalUnits": 720,
+      "unplaced": 0,
+      "merged": 15,
+      "conflicts": 0,
+      "warnings": 0,
+      "specials": 9,
+      "firstCompleteSec": 0.03,
+      "totalSec": 14.12,
+      "iterations": 40977152,
+      "cost": {
+        "initial": 3119.5,
+        "final": 2815
+      },
+      "before": {
+        "groupGaps": 51,
+        "teacherGaps": 363,
+        "overload": 0
+      },
+      "after": {
+        "groupGaps": 27,
+        "teacherGaps": 295,
+        "overload": 0
+      },
+      "curve": [
+        {
+          "t": 0.03,
+          "cost": 3041.1,
+          "unplaced": 0
+        },
+        {
+          "t": 0.83,
+          "cost": 2863.1,
+          "unplaced": 0
+        },
+        {
+          "t": 1.63,
+          "cost": 2854.8,
+          "unplaced": 0
+        },
+        {
+          "t": 2.43,
+          "cost": 2853.9,
+          "unplaced": 0
+        },
+        {
+          "t": 3.23,
+          "cost": 2849.5,
+          "unplaced": 0
+        },
+        {
+          "t": 4.04,
+          "cost": 2823.8,
+          "unplaced": 0
+        },
+        {
+          "t": 4.84,
+          "cost": 2817.8,
+          "unplaced": 0
+        },
+        {
+          "t": 5.64,
+          "cost": 2815.5,
+          "unplaced": 0
+        },
+        {
+          "t": 6.44,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 7.24,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 8.05,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 8.85,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 9.65,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 10.45,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 11.25,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 12.06,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 12.86,
+          "cost": 2815,
+          "unplaced": 0
+        },
+        {
+          "t": 13.66,
+          "cost": 2815,
+          "unplaced": 0
+        }
+      ]
+    }
+  ]
+}
