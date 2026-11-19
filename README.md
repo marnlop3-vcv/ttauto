@@ -134,4 +134,5 @@ node scripts/e2e-onboarding.cjs # ทดสอบประสบการณ์�
 node docs/standalone/build-standalone.cjs    # สร้าง docs/standalone/timetable-quick-guide-editable.docx (แก้ข้อความในไฟล์ .cjs หรือเปิดแก้ใน Word ได้เลย)
 soffice --headless --convert-to pdf --outdir docs/standalone docs/standalone/timetable-quick-guide-editable.docx
 ```
+ภาพประกอบสร้างใหม่ได้ด้วย `npx vite preview --port 4173` แล้ว `node scripts/make-shots-quick.cjs && python3 docs/standalone/prepare-images.py`
 ฟอนต์ในไฟล์ Word คือ Tahoma (มีในเครื่อง Windows/Mac ที่ลง Office) ภาพประกอบอยู่ใน `docs/standalone/img/`
