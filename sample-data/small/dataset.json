@@ -1,0 +1,623 @@
+{
+  "settings": {
+    "days": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "lunchAfter": 4,
+    "periods": [
+      {
+        "start": "08:30",
+        "end": "09:20"
+      },
+      {
+        "start": "09:20",
+        "end": "10:10"
+      },
+      {
+        "start": "10:10",
+        "end": "11:00"
+      },
+      {
+        "start": "11:00",
+        "end": "11:50"
+      },
+      {
+        "start": "12:50",
+        "end": "13:40"
+      },
+      {
+        "start": "13:40",
+        "end": "14:30"
+      },
+      {
+        "start": "14:30",
+        "end": "15:20"
+      },
+      {
+        "start": "15:20",
+        "end": "16:10"
+      }
+    ]
+  },
+  "teachers": [
+    {
+      "id": "8yj3t7cjxk2",
+      "name": "นางสมศรี ใจดี",
+      "role": "main"
+    },
+    {
+      "id": "z7h6corjxk2",
+      "name": "นายประเสริฐ มั่นคง",
+      "role": "main"
+    },
+    {
+      "id": "4yqtgfyjxk2",
+      "name": "นางสาวมาลี สุขใจ",
+      "role": "main"
+    },
+    {
+      "id": "qp4wzz6jxk2",
+      "name": "นายวิชัย ทองดี",
+      "role": "main"
+    },
+    {
+      "id": "mhwyvlyjxk2",
+      "name": "นางสุนีย์ รักเรียน",
+      "role": "main"
+    },
+    {
+      "id": "ftog6i9jxk2",
+      "name": "นายอนันต์ ชำนาญ",
+      "role": "main"
+    },
+    {
+      "id": "wkohch9jxk2",
+      "name": "นางสาวพิมพ์ใจ ศรีสุข",
+      "role": "co"
+    },
+    {
+      "id": "bd9m6ywjxk2",
+      "name": "นายกิตติ พัฒนา",
+      "role": "co"
+    },
+    {
+      "id": "48t73majxk2",
+      "name": "นางสมศรี ใจดี",
+      "role": "co"
+    }
+  ],
+  "groups": [
+    {
+      "id": "vpos6bejxk2",
+      "code": "6701",
+      "name": "ปวช.1/1",
+      "major": "การบัญชี"
+    },
+    {
+      "id": "f7jio8hjxk2",
+      "code": "6702",
+      "name": "ปวช.1/2",
+      "major": "การตลาด"
+    },
+    {
+      "id": "o95hjdejxk2",
+      "code": "6601",
+      "name": "ปวช.2/1",
+      "major": "การบัญชี"
+    },
+    {
+      "id": "a6n7n3fjxk2",
+      "code": "6602",
+      "name": "ปวช.2/2",
+      "major": "การตลาด"
+    }
+  ],
+  "subjects": [
+    {
+      "id": "8s8kfacjxk2",
+      "code": "20001-1001",
+      "name": "ภาษาไทย",
+      "periodsPerWeek": 2
+    },
+    {
+      "id": "xcnqrc5jxk2",
+      "code": "20000-1201",
+      "name": "คณิตศาสตร์",
+      "periodsPerWeek": 3
+    },
+    {
+      "id": "v6g24fdjxk2",
+      "code": "20000-1301",
+      "name": "ภาษาอังกฤษ",
+      "periodsPerWeek": 2
+    },
+    {
+      "id": "z16cgd6jxk2",
+      "code": "30100-1001",
+      "name": "การบัญชีเบื้องต้น",
+      "periodsPerWeek": 4
+    },
+    {
+      "id": "73pdse5jxk2",
+      "code": "30200-1001",
+      "name": "หลักการตลาด",
+      "periodsPerWeek": 3
+    },
+    {
+      "id": "czq407xjxk2",
+      "code": "20000-1401",
+      "name": "คอมพิวเตอร์",
+      "periodsPerWeek": 2
+    }
+  ],
+  "buildings": [
+    {
+      "id": "oqsmg8xjxk2",
+      "name": "อาคาร 1",
+      "floors": 3,
+      "roomsPerFloor": 4
+    },
+    {
+      "id": "ki4at1vjxk2",
+      "name": "อาคาร 2",
+      "floors": 2,
+      "roomsPerFloor": 3
+    }
+  ],
+  "specialCases": [
+    {
+      "id": "k2z6j8wjxk2",
+      "name": "คาบกิจกรรม",
+      "count": 1,
+      "condition": "ทุกวันคาบที่ 1",
+      "groupIds": [],
+      "teacherIds": []
+    },
+    {
+      "id": "q2g8w2ljxk2",
+      "name": "ชุมนุม",
+      "count": 2,
+      "condition": "วันพุธ คาบ 7",
+      "groupIds": [],
+      "teacherIds": []
+    },
+    {
+      "id": "msjpc11jxk2",
+      "name": "ประชุมครู",
+      "count": 2,
+      "condition": "วันอังคาร คาบ 7-8",
+      "groupIds": [],
+      "teacherIds": [
+        "8yj3t7cjxk2",
+        "z7h6corjxk2"
+      ]
+    }
+  ],
+  "assignments": [
+    {
+      "id": "rdtr6igjxk2",
+      "subjectId": "8s8kfacjxk2",
+      "mainTeacherIds": [
+        "8yj3t7cjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "vpos6bejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 1,
+        "no": 1
+      }
+    },
+    {
+      "id": "gda16jejxk2",
+      "subjectId": "xcnqrc5jxk2",
+      "mainTeacherIds": [
+        "z7h6corjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "vpos6bejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 1,
+        "no": 1
+      }
+    },
+    {
+      "id": "tv3arojjxk2",
+      "subjectId": "v6g24fdjxk2",
+      "mainTeacherIds": [
+        "4yqtgfyjxk2"
+      ],
+      "coTeacherIds": [
+        "bd9m6ywjxk2"
+      ],
+      "groupIds": [
+        "vpos6bejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 1,
+        "no": 1
+      }
+    },
+    {
+      "id": "8pec0y4jxk2",
+      "subjectId": "z16cgd6jxk2",
+      "mainTeacherIds": [
+        "qp4wzz6jxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "vpos6bejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 1,
+        "no": 1
+      }
+    },
+    {
+      "id": "7og1gnmjxk2",
+      "subjectId": "73pdse5jxk2",
+      "mainTeacherIds": [
+        "mhwyvlyjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "vpos6bejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 1,
+        "no": 1
+      }
+    },
+    {
+      "id": "qiafuu3jxk2",
+      "subjectId": "czq407xjxk2",
+      "mainTeacherIds": [
+        "ftog6i9jxk2"
+      ],
+      "coTeacherIds": [
+        "wkohch9jxk2"
+      ],
+      "groupIds": [
+        "vpos6bejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 1,
+        "no": 1
+      }
+    },
+    {
+      "id": "e5vqht9jxk2",
+      "subjectId": "8s8kfacjxk2",
+      "mainTeacherIds": [
+        "8yj3t7cjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "f7jio8hjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 1,
+        "no": 1
+      }
+    },
+    {
+      "id": "jqjcvnbjxk2",
+      "subjectId": "xcnqrc5jxk2",
+      "mainTeacherIds": [
+        "4yqtgfyjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "f7jio8hjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 2,
+        "no": 2
+      }
+    },
+    {
+      "id": "03qdfr1jxk2",
+      "subjectId": "v6g24fdjxk2",
+      "mainTeacherIds": [
+        "qp4wzz6jxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "f7jio8hjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 2,
+        "no": 2
+      }
+    },
+    {
+      "id": "vzgvmdyjxk2",
+      "subjectId": "z16cgd6jxk2",
+      "mainTeacherIds": [
+        "mhwyvlyjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "f7jio8hjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 2,
+        "no": 2
+      }
+    },
+    {
+      "id": "s2h7h0ojxk2",
+      "subjectId": "73pdse5jxk2",
+      "mainTeacherIds": [
+        "ftog6i9jxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "f7jio8hjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 2,
+        "no": 2
+      }
+    },
+    {
+      "id": "jkqj9s0jxk2",
+      "subjectId": "czq407xjxk2",
+      "mainTeacherIds": [
+        "8yj3t7cjxk2"
+      ],
+      "coTeacherIds": [
+        "wkohch9jxk2"
+      ],
+      "groupIds": [
+        "f7jio8hjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "oqsmg8xjxk2",
+        "floor": 2,
+        "no": 2
+      }
+    },
+    {
+      "id": "7n7crpwjxk2",
+      "subjectId": "8s8kfacjxk2",
+      "mainTeacherIds": [
+        "4yqtgfyjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "o95hjdejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 1,
+        "no": 3
+      }
+    },
+    {
+      "id": "bo7lmcjjxk2",
+      "subjectId": "xcnqrc5jxk2",
+      "mainTeacherIds": [
+        "qp4wzz6jxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "o95hjdejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 1,
+        "no": 3
+      }
+    },
+    {
+      "id": "hemsshyjxk2",
+      "subjectId": "v6g24fdjxk2",
+      "mainTeacherIds": [
+        "mhwyvlyjxk2"
+      ],
+      "coTeacherIds": [
+        "bd9m6ywjxk2"
+      ],
+      "groupIds": [
+        "o95hjdejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 1,
+        "no": 3
+      }
+    },
+    {
+      "id": "d5oow3qjxk2",
+      "subjectId": "z16cgd6jxk2",
+      "mainTeacherIds": [
+        "ftog6i9jxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "o95hjdejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 1,
+        "no": 3
+      }
+    },
+    {
+      "id": "0j8gquqjxk2",
+      "subjectId": "73pdse5jxk2",
+      "mainTeacherIds": [
+        "8yj3t7cjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "o95hjdejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 1,
+        "no": 3
+      }
+    },
+    {
+      "id": "wln4ow8jxk2",
+      "subjectId": "czq407xjxk2",
+      "mainTeacherIds": [
+        "z7h6corjxk2"
+      ],
+      "coTeacherIds": [
+        "wkohch9jxk2"
+      ],
+      "groupIds": [
+        "o95hjdejxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 1,
+        "no": 3
+      }
+    },
+    {
+      "id": "9vziokljxk2",
+      "subjectId": "8s8kfacjxk2",
+      "mainTeacherIds": [
+        "qp4wzz6jxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "a6n7n3fjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 2,
+        "no": 1
+      }
+    },
+    {
+      "id": "whndd4hjxk2",
+      "subjectId": "xcnqrc5jxk2",
+      "mainTeacherIds": [
+        "mhwyvlyjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "a6n7n3fjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 2,
+        "no": 1
+      }
+    },
+    {
+      "id": "6ee81ibjxk2",
+      "subjectId": "v6g24fdjxk2",
+      "mainTeacherIds": [
+        "ftog6i9jxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "a6n7n3fjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 2,
+        "no": 1
+      }
+    },
+    {
+      "id": "w92b132jxk2",
+      "subjectId": "z16cgd6jxk2",
+      "mainTeacherIds": [
+        "8yj3t7cjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "a6n7n3fjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 2,
+        "no": 1
+      }
+    },
+    {
+      "id": "3vdpwhijxk2",
+      "subjectId": "73pdse5jxk2",
+      "mainTeacherIds": [
+        "z7h6corjxk2"
+      ],
+      "coTeacherIds": [],
+      "groupIds": [
+        "a6n7n3fjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 2,
+        "no": 1
+      }
+    },
+    {
+      "id": "0wfuev7jxk2",
+      "subjectId": "czq407xjxk2",
+      "mainTeacherIds": [
+        "4yqtgfyjxk2"
+      ],
+      "coTeacherIds": [
+        "wkohch9jxk2"
+      ],
+      "groupIds": [
+        "a6n7n3fjxk2"
+      ],
+      "together": true,
+      "room": {
+        "buildingId": "ki4at1vjxk2",
+        "floor": 2,
+        "no": 1
+      }
+    }
+  ],
+  "schedule": null
+}

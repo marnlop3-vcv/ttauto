@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>คู่มือการใช้งาน ระบบจัดตารางสอนอัตโนมัติ</title>
+<link rel="stylesheet" href="../node_modules/@fontsource/sarabun/400.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/sarabun/600.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/sarabun/700.css">
+<style>
+  @page { size: A4; margin: 0; }
+  :root { --ink:#26323f; --muted:#667587; --accent:#4f6d8f; --dark:#2f4156; --soft:#eef2f6; --line:#d9e0e8; --warn:#fbf3df; --warnink:#7a5d17; --ok:#e5f2ea; --okink:#2f6a4c; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:'Sarabun',sans-serif; color:var(--ink); font-size:10.5pt; line-height:1.5; }
+  .page { width:210mm; height:297mm; padding:13mm 15mm 12mm; page-break-after:always; overflow:hidden; position:relative; }
+  .page:last-child { page-break-after:auto; }
+  h1 { font-size:24pt; margin:0; color:var(--dark); line-height:1.2; font-weight:700; }
+  .sub { color:var(--muted); font-size:12pt; margin:2px 0 0; }
+  h2 { font-size:14pt; color:var(--dark); margin:14px 0 6px; padding-left:9px; border-left:4px solid var(--accent); line-height:1.25; }
+  h2 small { font-weight:400; color:var(--muted); font-size:10pt; margin-left:6px; }
+  p { margin:4px 0; }
+  ul { margin:4px 0; padding-left:18px; } li { margin:1px 0; }
+  .band { display:flex; justify-content:space-between; align-items:flex-end; border-bottom:2px solid var(--line); padding-bottom:8px; margin-bottom:10px; }
+  .ver { color:var(--muted); font-size:9.5pt; text-align:right; }
+  .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin:8px 0 10px; }
+  .step { background:var(--soft); border-radius:8px; padding:8px 10px; }
+  .step b { display:block; color:var(--accent); font-size:16pt; line-height:1; }
+  .step span { font-weight:600; font-size:10.5pt; display:block; margin-top:2px; }
+  .step small { color:var(--muted); font-size:9pt; display:block; line-height:1.35; margin-top:2px; }
+  .shot { border:1px solid var(--line); border-radius:6px; width:100%; display:block; }
+  .crop { width:92%; margin:0 auto; aspect-ratio:2000/745; overflow:hidden; border:1px solid var(--line); border-radius:6px; }
+  .crop img { width:100%; display:block; }
+  .shot.s { width:80%; margin:0 auto; }
+  .shot.m { width:92%; margin:0 auto; }
+  .cap { color:var(--muted); font-size:9pt; text-align:center; margin:3px 0 6px; }
+  table { border-collapse:collapse; width:100%; font-size:9.7pt; margin:4px 0; }
+  th { background:var(--soft); text-align:left; padding:4px 8px; color:var(--muted); font-weight:600; }
+  td { border-top:1px solid var(--line); padding:4px 8px; vertical-align:top; }
+  code { background:var(--soft); border-radius:4px; padding:0 5px; font-family:'Sarabun',monospace; font-size:9.5pt; }
+  .box { border-radius:8px; padding:7px 11px; margin:7px 0; font-size:10pt; }
+  .tip { background:var(--ok); color:var(--okink); }
+  .warn { background:var(--warn); color:var(--warnink); }
+  .cols { display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start; }
+  .foot { position:absolute; left:15mm; right:15mm; bottom:7mm; color:var(--muted); font-size:8.5pt; display:flex; justify-content:space-between; border-top:1px solid var(--line); padding-top:3px; }
+  .num { display:inline-block; width:17px; height:17px; line-height:17px; border-radius:50%; background:var(--accent); color:#fff; text-align:center; font-size:9pt; margin-right:5px; }
+</style>
+</head>
+<body>
+
+<!-- ================= หน้า 1 ================= -->
+<section class="page">
+  <div class="band">
+    <div>
+      <h1>ระบบจัดตารางสอนอัตโนมัติ</h1>
+      <p class="sub">คู่มือการใช้งานฉบับย่อ</p>
+    </div>
+    <div class="ver">เวอร์ชัน 1.5<br>สำหรับผู้ใช้งานทั่วไป</div>
+  </div>
+  <p>กรอกข้อมูล <b>ครู กลุ่มเรียน วิชา อาคาร</b> แล้วให้ระบบจัดตารางให้โดยอัตโนมัติ ดูผลได้ตาม <b>ครู / กลุ่มเรียน / อาคาร</b> และส่งออกเป็น <b>PDF หรือ Excel</b> ข้อมูลทั้งหมดอยู่ในเบราว์เซอร์ของเครื่องคุณ ไม่ถูกส่งไปที่ใด</p>
+
+  <h2>เริ่มใช้ใน 4 ขั้นตอน</h2>
+  <div class="steps">
+    <div class="step"><b>1</b><span>ตั้งค่าคาบเรียน</span><small>วันที่สอน จำนวนคาบ เวลา พักเที่ยง</small></div>
+    <div class="step"><b>2</b><span>กรอกข้อมูล</span><small>ครู กลุ่มเรียน วิชา อาคาร และกรณีพิเศษ</small></div>
+    <div class="step"><b>3</b><span>กำหนดการเรียน</span><small>เลือกว่า วิชาไหน ใครสอน ใครเรียน ห้องไหน</small></div>
+    <div class="step"><b>4</b><span>จัดตาราง</span><small>Dashboard › จัดตารางอัตโนมัติ › Export</small></div>
+  </div>
+
+  <img class="shot s" src="shots/dashboard.png" alt="หน้า Dashboard">
+  <p class="cap">หน้า Dashboard — เลือกดูตามครู/กลุ่มเรียน/อาคาร, กดจัดตาราง, Export PDF/Excel, มีสรุปคาบต่อสัปดาห์ใต้ตาราง</p>
+
+  <div class="cols">
+    <div class="box tip"><b>เมนูทางซ้ายมี 2 เมนู</b><br><b>Dashboard</b> ดูและส่งออกตาราง<br><b>กรอกข้อมูล</b> ตั้งค่าและกรอกข้อมูลทั้งหมด</div>
+    <div class="box tip"><b>อยากลองก่อน?</b><br>ไปที่ กรอกข้อมูล แล้วกด <b>ข้อมูลตัวอย่าง › เล็ก / กลาง / ใหญ่</b> จากนั้นไป Dashboard กด "จัดตารางอัตโนมัติ"</div>
+  </div>
+  <div class="box warn"><b>ข้อมูลของคุณเป็นของคุณคนเดียว — ควรรู้ 3 เรื่อง</b>
+    <ul>
+      <li><b>เก็บเฉพาะในเบราว์เซอร์เครื่องนี้</b> ไม่ถูกส่งไปที่ใด ผู้ใช้คนอื่นหรือผู้พัฒนาเว็บมองไม่เห็นข้อมูลของคุณ (แต่ละเครื่อง/เบราว์เซอร์แยกกัน และไม่ซิงก์ข้ามเครื่อง)</li>
+      <li><b>สำรองข้อมูลเป็นระยะ:</b> กรอกข้อมูล › <b>สำรองข้อมูล (JSON)</b> ถ้าล้างเบราว์เซอร์หรือเปลี่ยนเครื่อง ข้อมูลจะหาย ไม่มีใครกู้คืนให้ได้ ส่งไฟล์ให้เพื่อนร่วมงานแล้วใช้ <b>กู้คืนข้อมูล</b> เพื่อแชร์ชุดเดียวกัน</li>
+      <li><b>เครื่องใช้ร่วมกัน (เช่น ห้องพักครู):</b> สำรองแล้วกด <b>ล้างข้อมูลทั้งหมด</b> ก่อนเลิกใช้ หรือเปิดหน้าต่างไม่ระบุตัวตน (Incognito)</li>
+    </ul>
+  </div>
+  <div class="foot"><span>ระบบจัดตารางสอนอัตโนมัติ — คู่มือฉบับย่อ</span><span>1 / 5</span></div>
+</section>
+
+<!-- ================= หน้า 2 ================= -->
+<section class="page">
+  <h2><span class="num">1</span>ตั้งค่าคาบเรียน <small>กรอกข้อมูล › ตั้งค่าคาบเรียน (ต้องทำก่อน)</small></h2>
+  <div class="cols">
+    <img class="shot" src="shots/settings.png" alt="ตั้งค่าคาบเรียน">
+    <ul>
+      <li>ติ๊กวันที่เปิดสอน (เช่น จันทร์–ศุกร์)</li>
+      <li>ใส่จำนวนคาบต่อวัน แล้วกรอกเวลาเริ่ม–จบของแต่ละคาบ</li>
+      <li>เลือก <b>พักเที่ยงหลังคาบที่</b> เท่าไร (ใช้กับคำสั่ง "ช่วงเช้า/ช่วงบ่าย" และการจัดคาบติดกันจะไม่ข้ามพักเที่ยง)</li>
+      <li>กด <b>บันทึกการตั้งค่า</b></li>
+    </ul>
+  </div>
+
+  <h2><span class="num">2</span>กรอกข้อมูล <small>แท็บ ครู / กลุ่มเรียน / วิชาเรียน / ห้องเรียน</small></h2>
+  <table>
+    <tr><th style="width:18%">แท็บ</th><th>ต้องกรอก</th><th style="width:32%">หมายเหตุ</th></tr>
+    <tr><td>ครู</td><td>ชื่อครู, หน้าที่ (ครูสอนหลัก / ครูสอนร่วม)</td><td>ชื่อเดียวกันเพิ่มได้ถ้าคนละหน้าที่ (ถือเป็นคนเดียวกัน)</td></tr>
+    <tr><td>กลุ่มเรียน</td><td>รหัสกลุ่มเรียน, ชื่อกลุ่มเรียน, สาขาวิชา</td><td>รหัสห้ามซ้ำ</td></tr>
+    <tr><td>วิชาเรียน</td><td>รหัสวิชา, ชื่อวิชา, จำนวนคาบต่อสัปดาห์</td><td>รหัสห้ามซ้ำ</td></tr>
+    <tr><td>ห้องเรียน</td><td>ชื่ออาคาร, จำนวนชั้น, จำนวนห้อง <b>ต่อชั้น</b></td><td>ชั้น 2 ห้อง 3 = ห้อง 203</td></tr>
+  </table>
+  <p>ทุกรายการมีปุ่ม <b>ลบ</b> ในตารางสรุปด้านล่าง หากกรอกผิด (ถ้าข้อมูลถูกใช้ในกำหนดการเรียน ระบบจะเตือนก่อนลบ)</p>
+
+  <h2>นำเข้าข้อมูลจากไฟล์ <small>Excel (.xlsx) • CSV • JSON</small></h2>
+  <div class="cols">
+    <img class="shot" src="shots/teachers.png" alt="ปุ่ม Template และ Import">
+    <div>
+      <p><span class="num">1</span>กด <b>Template</b> เลือกรูปแบบ Excel / CSV / JSON</p>
+      <p><span class="num">2</span>กรอกข้อมูลตามหัวตาราง</p>
+      <p><span class="num">3</span>กด <b>Import จากไฟล์</b> — ระบบตรวจทุกแถว นำเข้าแถวที่ถูก และบอกเลขแถวที่ผิด</p>
+    </div>
+  </div>
+  <div class="box warn">
+    <b>ข้อควรระวังเมื่อ Import</b>
+    <ul>
+      <li><b>ลำดับ:</b> Import ครู และ กลุ่มเรียน ก่อน แล้วจึงกรณีพิเศษ (เพราะกรณีพิเศษอ้างอิงชื่อครู/รหัสกลุ่ม)</li>
+      <li><b>CSV ภาษาไทย:</b> บันทึกจาก Excel เป็น <b>"CSV UTF-8"</b> (ระบบพยายามแปลงไฟล์เก่า Windows-874 ให้อัตโนมัติ)</li>
+      <li><b>รหัสที่ขึ้นต้นด้วย 0</b> (เช่น 06701) ให้เก็บเป็นข้อความ ไม่ใช่ตัวเลข; ไฟล์ .xlsx อ่านเฉพาะชีตแรก; ไม่รองรับ .xls เก่า</li>
+      <li><b>ขนาด:</b> ไฟล์ไม่เกิน 5 MB; ชื่อซ้ำจะถูกข้ามและแจ้งในรายงาน</li>
+      <li><b>กำหนดการเรียน</b> ไม่มีไฟล์ Import รายส่วน — ใช้ <b>กู้คืนข้อมูล</b> (ไฟล์ JSON สำรองทั้งชุด) หรือกรอกในหน้าเว็บ</li>
+    </ul>
+  </div>
+  <h2>ข้อมูลตัวอย่างสำหรับทดลอง <small>กรอกข้อมูล › ข้อมูลตัวอย่าง (แทนที่ข้อมูลปัจจุบัน)</small></h2>
+  <table>
+    <tr><th>ขนาด</th><th>กลุ่มเรียน</th><th>วิชา</th><th>ครู</th><th>อาคาร</th><th>คาบ/สัปดาห์</th><th>เหมาะสำหรับ</th></tr>
+    <tr><td><b>เล็ก</b></td><td>4</td><td>6</td><td>8</td><td>2</td><td>64</td><td>ลองฟีเจอร์ทั้งหมดอย่างรวดเร็ว</td></tr>
+    <tr><td><b>กลาง</b></td><td>12</td><td>9</td><td>23</td><td>3</td><td>264</td><td>สถานศึกษาขนาดเล็ก</td></tr>
+    <tr><td><b>ใหญ่</b></td><td>30</td><td>10</td><td>54</td><td>6</td><td>720</td><td>ทดสอบความเร็วกับข้อมูลมาก</td></tr>
+  </table>
+  <p>ในโฟลเดอร์ <code>sample-data/small|medium|large</code> มีไฟล์ Excel / CSV / JSON ของทุกแท็บไว้ทดลอง Import และ <code>dataset.json</code> (ชุดสมบูรณ์รวมกำหนดการเรียน) ใช้ปุ่ม <b>กู้คืนข้อมูล</b></p>
+  <div class="foot"><span>ระบบจัดตารางสอนอัตโนมัติ — คู่มือฉบับย่อ</span><span>2 / 5</span></div>
+</section>
+
+<!-- ================= หน้า 3 ================= -->
+<section class="page">
+  <h2><span class="num">3</span>กรณีพิเศษ <small>คาบที่ต้องมีเวลาตายตัว เช่น กิจกรรม ชุมนุม ประชุม — ระบบวางก่อนเสมอ</small></h2>
+  <div class="crop"><img src="shots/special.png" alt="กรณีพิเศษ"></div>
+  <p class="cap">พิมพ์เงื่อนไขเป็นภาษาไทย ระบบแสดงทันทีว่าเข้าใจเป็นอะไร (แถบสีเขียว) ก่อนกดเพิ่ม</p>
+  <div class="cols">
+    <table>
+      <tr><th>พิมพ์ว่า</th><th>ความหมาย</th></tr>
+      <tr><td><code>ทุกวันคาบที่ 1</code></td><td>ทุกวัน คาบ 1</td></tr>
+      <tr><td><code>วันพุธ คาบ 7-8</code></td><td>พุธ คาบ 7 และ 8</td></tr>
+      <tr><td><code>จันทร์-ศุกร์ คาบสุดท้าย</code></td><td>คาบสุดท้ายของวัน</td></tr>
+      <tr><td><code>วันศุกร์ ช่วงบ่าย</code></td><td>หลังพักเที่ยงทั้งหมด</td></tr>
+      <tr><td><code>จันทร์ คาบ 1; พุธ คาบ 3</code></td><td>หลายเงื่อนไข คั่นด้วย ;</td></tr>
+    </table>
+    <div>
+      <p><b>ใช้กับใคร?</b></p>
+      <ul>
+        <li><b>ไม่เลือกอะไรเลย</b> = ทุกกลุ่มเรียนและทุกครู</li>
+        <li>เลือก <b>กลุ่มเรียน</b> และ/หรือ <b>ครู</b> = เฉพาะที่เลือก (เช่น ครู A ประชุมทุกวันอังคาร คาบ 1–2)</li>
+        <li>ช่องเลือกพิมพ์ค้นหาได้ทุกช่อง</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2><span class="num">4</span>กำหนดการเรียน <small>1 รายการ = 1 วิชา ที่กลุ่มเรียนเรียนกับครู ในห้องที่กำหนด</small></h2>
+  <img class="shot m" src="shots/assign.png" alt="กำหนดการเรียน">
+  <p class="cap">เลือกจากข้อมูลที่มีในระบบ พิมพ์ค้นหาได้ในทุกช่อง ครูและกลุ่มเรียนเลือกได้หลายรายการ</p>
+  <div class="cols">
+    <div class="box tip"><b>เรียนรวมกัน</b> — กลุ่มที่เลือกเรียนเวลาเดียวกันในห้องเดียวกัน และรวมกับกำหนดการอื่นที่ วิชา/ครู/ห้อง เดียวกัน (ที่เลือก "เรียนรวมกัน") โดยอัตโนมัติ</div>
+    <div class="box tip"><b>แยกเรียน</b> — ระบบจัดเวลาให้แต่ละกลุ่มคนละเวลา (ครูและห้องเดียวกันสอนทีละกลุ่ม)</div>
+  </div>
+  <div class="foot"><span>ระบบจัดตารางสอนอัตโนมัติ — คู่มือฉบับย่อ</span><span>3 / 5</span></div>
+</section>
+
+<!-- ================= หน้า 4 ================= -->
+<section class="page">
+  <h2><span class="num">5</span>จัดตารางและดูผล <small>เมนู Dashboard</small></h2>
+  <ul>
+    <li>เลือก <b>เวลาประมวลผลสูงสุด</b> (5–120 วินาที ค่าเริ่มต้น 15) แล้วกด <b>จัดตารางอัตโนมัติ</b> — ยิ่งให้เวลามาก ตารางยิ่งสวย ระหว่างรันกด <b>หยุดและใช้ผลที่ดีที่สุดตอนนี้</b> ได้</li>
+    <li>เลือกดูตาม <b>ครู / กลุ่มเรียน / อาคาร</b> แล้วเลือกรายการ (พิมพ์ค้นหาได้) ใต้ตารางมี <b>สรุปจำนวนคาบต่อสัปดาห์</b></li>
+    <li>วิชาที่สอนติดกันจะรวมเป็น <b>ช่องเดียว</b> พร้อมป้าย เช่น "4 คาบติดกัน" ช่องสีเทาคือกรณีพิเศษ</li>
+    <li><b>Export PDF</b> (ตารางที่เลือก) และ <b>Export Excel</b> (รายการนี้ หรือทุกกลุ่ม/ครู/อาคาร แยกเป็นชีต) อยู่ที่หน้าเดียวกัน</li>
+    <li>หากแก้ข้อมูลภายหลัง ให้กดจัดตารางใหม่ทุกครั้ง</li>
+  </ul>
+
+  <h2>กฎที่ระบบใช้จัดตาราง</h2>
+  <table>
+    <tr><td style="width:34%"><b>ห้ามชนกันเด็ดขาด</b></td><td>ครู (ชื่อเดียวกันนับเป็นคนเดียว), กลุ่มเรียน, ห้องเรียน จะไม่อยู่ในคาบเดียวกันสองที่</td></tr>
+    <tr><td><b>วิชาไม่เกิน 4 คาบ/สัปดาห์</b></td><td>จัดเป็นช่วงเดียวติดกันในวันเดียว ไม่ข้ามพักเที่ยง (ถ้าทำไม่ได้จริงจะแยกช่วงและแจ้งเตือน)</td></tr>
+    <tr><td><b>วิชามากกว่า 4 คาบ</b></td><td>กระจายคนละวัน</td></tr>
+    <tr><td><b>ความสวยของตาราง</b></td><td>ระบบพยายามลดคาบว่างคั่นกลางวันของนักเรียนและครู, ไม่ให้ครูสอนติดกันเกิน 4 คาบ, และกระจายภาระรายวันให้สมดุล (โดยเน้นนักเรียนก่อน)</td></tr>
+  </table>
+
+  <h2>แก้ปัญหาที่พบบ่อย</h2>
+  <table>
+    <tr><th style="width:34%">อาการ</th><th>วิธีแก้</th></tr>
+    <tr><td>"จัดไม่ได้ N คาบ"</td><td>อ่านเหตุผลในกล่องสีแดง เช่น ครูมีช่องว่างไม่พอ → ลดภาระครู/เพิ่มครู, เปลี่ยนห้อง, หรือเพิ่มจำนวนคาบต่อวัน แล้วกดจัดใหม่ (หรือเพิ่มเวลาประมวลผล)</td></tr>
+    <tr><td>ปุ่มจัดตารางกดไม่ได้</td><td>ยังไม่ได้ตั้งค่าคาบเรียน หรือยังไม่มีกำหนดการเรียน</td></tr>
+    <tr><td>Import แล้วแจ้งผิดบางแถว</td><td>ดูเลขแถวในรายงาน แก้ไฟล์ แล้ว Import ใหม่ (แถวที่ถูกต้องเข้าระบบแล้ว ชื่อซ้ำจะถูกข้ามเอง)</td></tr>
+    <tr><td>ใส่รหัสแล้วขึ้น "รหัสไม่ถูกต้อง"</td><td>เช็กตัวพิมพ์เล็ก/ใหญ่ของรหัสที่ตั้งเอง (รหัสที่ระบบสร้างให้พิมพ์เล็กได้) และถามผู้ดูแลว่าเผยแพร่ตารางใหม่แล้วเปลี่ยนรหัสหรือไม่</td></tr>
+    <tr><td>เห็นข้อมูลของคนอื่นบนเครื่องร่วม</td><td>เครื่องนั้นมีผู้ใช้ก่อนหน้าทิ้งข้อมูลไว้ในเบราว์เซอร์เดียวกัน — สำรองข้อมูลของคุณ แล้วกด <b>ล้างข้อมูลทั้งหมด</b> หรือใช้หน้าต่างไม่ระบุตัวตน</td></tr>
+    <tr><td>ข้อมูลหายหลังเปลี่ยนเครื่อง/ล้างเบราว์เซอร์</td><td>ข้อมูลเก็บในเบราว์เซอร์ — กด <b>สำรองข้อมูล (JSON)</b> เก็บไว้เป็นระยะ และ <b>กู้คืนข้อมูล</b> เมื่อต้องการ</td></tr>
+  </table>
+
+  <div class="box warn"><b>สำหรับผู้ดูแลระบบ — เปิดโปรแกรม</b><br>
+    ถ้าใช้ผ่านเว็บที่เผยแพร่ไว้ ไม่ต้องติดตั้งอะไร เปิดลิงก์ได้เลย ส่วนการใช้ไฟล์ในเครื่อง: ติดตั้ง Node.js (รุ่น LTS) แตกไฟล์ <code>dist</code> แล้วรันในโฟลเดอร์นั้น: <code>npx serve . -l 5173</code> จากนั้นเปิด <code>http://localhost:5173</code> (เก็บหน้าต่างคำสั่งไว้ตลอดที่ใช้งาน และใช้ที่อยู่เดิมทุกครั้ง เพื่อให้ข้อมูลเดิมยังอยู่)
+  </div>
+  <div class="foot"><span>ระบบจัดตารางสอนอัตโนมัติ — คู่มือฉบับย่อ</span><span>4 / 5</span></div>
+</section>
+
+<!-- ================= หน้า 5 ================= -->
+<section class="page">
+  <h2><span class="num">6</span>เผยแพร่ตารางให้นักเรียนและครู <small>ใส่รหัสเพื่อดู • ดูและ Export ได้อย่างเดียว แก้ไขไม่ได้</small></h2>
+  <p>ผู้ดูแลจัดตารางตามปกติ แล้วเผยแพร่เป็น <b>ไฟล์ที่เข้ารหัส</b> นักเรียนและครูเปิดเว็บ ใส่รหัสของตัวเอง ระบบพาไปยังมุมมองที่ตรงกับรหัสนั้นให้อัตโนมัติ</p>
+  <table>
+    <tr><th style="width:15%">มุมมอง</th><th style="width:25%">รหัสที่ใช้</th><th>เห็นอะไร</th><th style="width:14%">แก้ไข</th><th style="width:16%">Export</th></tr>
+    <tr><td><b>นักเรียน</b></td><td>รหัสนักเรียน</td><td>ตารางเรียนรายกลุ่ม เลือกดูห้องไหนก็ได้ (ไม่เห็นข้อมูลครูทั้งหมด/ข้อมูลดิบ)</td><td>ไม่ได้</td><td>PDF / Excel ได้</td></tr>
+    <tr><td><b>ครู</b></td><td>รหัสครู</td><td>ตารางสอนรายครู เลือกดูครูท่านใดก็ได้</td><td>ไม่ได้</td><td>PDF / Excel ได้</td></tr>
+    <tr><td><b>ผู้ดูแล</b></td><td>รหัสล็อกผู้ดูแล (ตั้งหรือไม่ตั้งก็ได้)</td><td>ทุกอย่าง: Dashboard, กรอกข้อมูล, เผยแพร่ตาราง</td><td>ได้</td><td>ได้</td></tr>
+  </table>
+
+  <h2 style="margin-top:12px">สำหรับผู้ดูแล <small>เมนู เผยแพร่ตาราง</small></h2>
+  <div class="cols" style="grid-template-columns:0.85fr 1.15fr">
+    <img class="shot" src="shots/publish.png" alt="เผยแพร่ตาราง">
+    <ol style="margin:0; padding-left:18px">
+      <li>จัดตารางให้เรียบร้อยที่ Dashboard</li>
+      <li>เมนู <b>เผยแพร่ตาราง</b> › ตั้งชื่อชุดตาราง กด <b>สร้างรหัสให้</b> ทั้งรหัสนักเรียนและรหัสครู (ต้องไม่เหมือนกัน) › <b>สร้างไฟล์เผยแพร่</b></li>
+      <li>วางไฟล์ <code>published.enc.json</code> ที่โฟลเดอร์ <code>public/published/</code> แล้ว push ขึ้น GitHub รอ Actions เขียว 1–2 นาที (หรือส่งไฟล์ให้ผู้ดูทางไลน์)</li>
+      <li>ส่งลิงก์และรหัส <b>แยกกลุ่ม</b> (ใช้ปุ่ม "คัดลอกข้อความ")</li>
+      <li>ตารางเปลี่ยน → เผยแพร่ใหม่ทุกครั้ง</li>
+    </ol>
+  </div>
+
+  <h2 style="margin-top:12px">สำหรับนักเรียนและครู</h2>
+  <div class="cols" style="grid-template-columns:0.62fr 1.38fr; width:88%; margin:0 auto">
+    <img class="shot" src="shots/login.png" alt="หน้าเข้าสู่ระบบ">
+    <img class="shot" src="shots/viewer.png" alt="มุมมองนักเรียน">
+  </div>
+  <p class="cap">เปิดลิงก์ › ใส่รหัสที่ได้รับ › เลือกกลุ่มเรียน/ครู › ดูตารางหรือกด Export (ได้รหัสแล้วพิมพ์เล็กก็ได้ ถ้าเป็นรหัสที่ระบบสร้างให้)</p>
+
+  <div class="box warn"><b>ข้อควรระวังเรื่องรหัส</b>
+    <ul>
+      <li>ไฟล์ที่เผยแพร่เปิดสาธารณะแต่เข้ารหัส — <b>รหัสต้องยาวและเดายาก</b> ระบบไม่ยอมรับรหัสสั้น แนะนำให้กด "สร้างรหัสให้"</li>
+      <li><b>ระบบไม่เก็บรหัสที่ตั้ง</b> ลืมแล้วกู้ไม่ได้ ต้องตั้งและเผยแพร่ใหม่ • รหัสเป็นรหัสร่วม ยกเลิกสิทธิ์รายคนไม่ได้ ถ้ารหัสหลุดให้เปลี่ยนรหัสแล้วเผยแพร่ใหม่</li>
+      <li>รหัสล็อกผู้ดูแลเป็นเพียง <b>การล็อกหน้าจอบนเครื่องนั้น</b> ไม่ได้เข้ารหัสข้อมูลในเครื่อง ลืมรหัสต้องรีเซ็ตเครื่อง (ข้อมูลในเครื่องถูกลบ) จึงควรสำรองข้อมูล (JSON) เสมอ</li>
+    </ul>
+  </div>
+  <div class="foot"><span>ระบบจัดตารางสอนอัตโนมัติ — คู่มือฉบับย่อ</span><span>5 / 5</span></div>
+</section>
+</body>
+</html>
