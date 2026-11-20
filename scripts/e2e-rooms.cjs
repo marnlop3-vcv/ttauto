@@ -33,6 +33,19 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
 
   // กำหนดการเรียน: 2 ครู 2 กลุ่ม แยกไป 2 อาคาร
   await p.goto(ROOT + '#/input?tab=assignments');
+  // ปุ่ม "เลือกทั้งหมด": กลุ่มเรียน (ตัวอย่างเล็ก 4 กลุ่ม)
+  const grpBox = p.locator('.smulti').nth(2);
+  await grpBox.getByRole('button', { name: 'เลือกทั้งหมด (4)' }).click();
+  assert((await grpBox.locator('.sm-chips .chip').count()) === 4, 'ปุ่ม "เลือกทั้งหมด (4)" เลือกครบ 4 กลุ่มโดยไม่ต้องพิมพ์ค้นหา');
+  await grpBox.getByRole('button', { name: 'ล้างที่เลือก' }).click();
+  assert((await grpBox.locator('.sm-chips .chip').count()) === 0, '"ล้างที่เลือก" ล้างหมด');
+  await grpBox.locator('input.sm-search').fill('6701');
+  await grpBox.getByRole('button', { name: /เลือกทั้งหมดที่ค้นเจอ \(1\)/ }).click();
+  assert((await grpBox.locator('.sm-chips .chip').count()) === 1, 'พิมพ์ค้นหา "6701" แล้วเลือกที่ค้นเจอ ได้เฉพาะ 1 กลุ่ม');
+  await grpBox.locator('input.sm-search').fill('');
+  await grpBox.getByRole('button', { name: /เลือกทั้งหมด \(4\)/ }).click();
+  assert((await grpBox.locator('.sm-chips .chip').count()) === 4, 'เลือกทั้งหมดต่อจากที่เลือกไว้ ไม่ซ้ำ (รวม 4)');
+  await grpBox.getByRole('button', { name: 'ล้างที่เลือก' }).click();
   await pick(0, 'เสรี');
   await p.locator('.smulti').nth(0).locator('label', { hasText: 'สมศรี' }).first().locator('input').check();
   await p.locator('.smulti').nth(0).locator('label', { hasText: 'ประเสริฐ' }).first().locator('input').check();

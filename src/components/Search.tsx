@@ -75,8 +75,9 @@ export function SearchMulti({ items, selected, onChange, empty = 'ยังไ�
         {filtered.length > MAX_SHOWN && <div className="none">แสดง {MAX_SHOWN} จาก {filtered.length} — พิมพ์เพิ่มเพื่อกรอง</div>}
       </div>
       <div className="sm-actions">
-        <button type="button" className="link" disabled={!q.trim() || !filtered.length}
-          onClick={() => onChange([...new Set([...selected, ...filtered.map((o) => o.value)])])}>เลือกทั้งหมดที่ค้นเจอ ({q.trim() ? filtered.length : 0})</button>
+        {/* ช่องค้นหาว่าง = เลือกทุกรายการ; มีคำค้น = เลือกเฉพาะที่ค้นเจอ (สะสมเพิ่มจากที่เลือกไว้) */}
+        <button type="button" className="link" disabled={!filtered.length}
+          onClick={() => onChange([...new Set([...selected, ...filtered.map((o) => o.value)])])}>{q.trim() ? `เลือกทั้งหมดที่ค้นเจอ (${filtered.length})` : `เลือกทั้งหมด (${items.length})`}</button>
         <button type="button" className="link" disabled={!selected.length} onClick={() => onChange([])}>ล้างที่เลือก</button>
       </div>
       {selected.length > 0 && (
