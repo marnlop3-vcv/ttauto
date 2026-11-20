@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import GettingStarted from '../components/GettingStarted';
+import LoadCheck from '../components/LoadCheck';
 import { SearchSelect } from '../components/Search';
 import TimetableGrid from '../components/TimetableGrid';
 import { exportTimetableExcel } from '../lib/excel';
@@ -75,6 +76,7 @@ export default function Dashboard() {
       <p className="page-sub">ดูตารางสอนตามครู กลุ่มเรียน หรืออาคาร และส่งออกเป็น PDF / Excel</p>
 
       <GettingStarted onRun={run} canRun={configured && hasWork && !busy} running={running} />
+      <LoadCheck />
 
       <div className="card">
         <div className="toolbar">
