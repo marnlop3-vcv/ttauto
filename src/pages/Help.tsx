@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Block, FAQ, GLOSSARY, MANUAL, QUICK_TRY, REAL_STEPS, Step } from '../help/content';
+import { Block, FAQ, GLOSSARY, MANUAL, QUICK10, QUICK_TRY, Step } from '../help/content';
 
 function StepList({ steps }: { steps: Step[] }) {
   return (
@@ -20,21 +20,37 @@ function StepList({ steps }: { steps: Step[] }) {
   );
 }
 
+/** **ตัวหนา** และ `ชื่อปุ่ม/ข้อความบนจอ` */
+function Rich({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(\*\*[^*]+\*\*|`[^`]+`)/).map((x, i) =>
+        x.startsWith('**') ? <b key={i}>{x.slice(2, -2)}</b> : x.startsWith('`') ? <b key={i} className="man-key">{x.slice(1, -1)}</b> : <span key={i}>{x}</span>)}
+    </>
+  );
+}
+
 function Blocks({ blocks }: { blocks: Block[] }) {
   return (
     <>
       {blocks.map((b, i) => {
         switch (b.t) {
-          case 'p': return <p key={i} className="man-p">{b.text}</p>;
-          case 'steps': return <ol key={i} className="man-steps">{b.items.map((x, j) => <li key={j}>{x}</li>)}</ol>;
-          case 'list': return <ul key={i} className="man-list">{b.items.map((x, j) => <li key={j}>{x}</li>)}</ul>;
-          case 'tip': return <div key={i} className="msg ok man-note">💡 {b.text}</div>;
-          case 'warn': return <div key={i} className="msg warn man-note">⚠ {b.text}</div>;
+          case 'p': return <p key={i} className="man-p"><Rich text={b.text} /></p>;
+          case 'steps': return <ol key={i} className="man-steps">{b.items.map((x, j) => <li key={j}><Rich text={x} /></li>)}</ol>;
+          case 'list': return <ul key={i} className="man-list">{b.items.map((x, j) => <li key={j}><Rich text={x} /></li>)}</ul>;
+          case 'tip': return <div key={i} className="msg ok man-note">💡 <Rich text={b.text} /></div>;
+          case 'warn': return <div key={i} className="msg warn man-note">⚠ <Rich text={b.text} /></div>;
+          case 'img': return (
+            <figure key={i} className="man-fig"><img src={b.src} alt={b.alt} loading="lazy" style={b.w ? { maxWidth: b.w } : undefined} />{b.caption && <figcaption>{b.caption}</figcaption>}</figure>
+          );
+          case 'imgs': return (
+            <div key={i} className="man-figs">{b.items.map((it) => <figure key={it.src} className="man-fig"><img src={it.src} alt={it.alt} loading="lazy" />{it.caption && <figcaption>{it.caption}</figcaption>}</figure>)}</div>
+          );
           case 'table': return (
             <div key={i} className="man-table-wrap">
               <table className="data man-table">
                 <thead><tr>{b.head.map((h) => <th key={h}>{h}</th>)}</tr></thead>
-                <tbody>{b.rows.map((r, j) => <tr key={j}>{r.map((c, k) => <td key={k}>{c}</td>)}</tr>)}</tbody>
+                <tbody>{b.rows.map((r, j) => <tr key={j}>{r.map((c, k) => <td key={k}><Rich text={c} /></td>)}</tr>)}</tbody>
               </table>
             </div>
           );
@@ -66,10 +82,17 @@ export default function Help() {
         <Link className="btn primary" to="/">ไปที่ Dashboard เพื่อเริ่มลอง</Link>
       </div>
 
-      <div className="card">
-        <h2>🏫 ใช้กับโรงเรียนจริง — ภาพรวม 6 ขั้น</h2>
-        <StepList steps={REAL_STEPS} />
-        <p className="hint">ทุกขั้นกลับมาแก้ภายหลังได้ แต่ถ้าแก้ข้อมูลหลังจัดตารางแล้ว ต้องกดจัดตารางใหม่ (ตารางอาจเปลี่ยนจากเดิม)</p>
+      <div className="card" id="man-quick10">
+        <h2>🏫 ใช้งาน 10 ขั้น — ตั้งแต่เปิดลิงก์ถึงแจกตาราง</h2>
+        <p className="hint" style={{ marginTop: 0 }}>ทำตามลำดับ มีภาพประกอบทุกขั้น ทุกขั้นกลับมาแก้ภายหลังได้ (แก้ข้อมูลหลังจัดตารางแล้ว ต้องกดจัดตารางใหม่)</p>
+        <ol className="man-quick">
+          {QUICK10.map((q) => (
+            <li key={q.id} id={'man-' + q.id}>
+              <div className="man-quick-head"><span className="help-no">{q.icon}</span><h3>{q.title}</h3></div>
+              <div className="man-quick-body"><Blocks blocks={q.blocks} /></div>
+            </li>
+          ))}
+        </ol>
       </div>
 
       <div className="card" id="man-top">

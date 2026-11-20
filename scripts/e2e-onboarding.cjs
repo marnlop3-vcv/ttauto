@@ -122,9 +122,16 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
   // ===== 7) หน้า "วิธีใช้" =====
   await p.locator('.nav a', { hasText: 'วิธีใช้' }).click();
   await p.getByRole('heading', { level: 1, name: 'วิธีใช้' }).waitFor();
-  for (const h of ['ลองใช้ใน 5 นาที', 'ใช้กับโรงเรียนจริง', 'คำศัพท์ที่ควรรู้', 'ถามตอบ', 'คู่มือฉบับ PDF']) {
+  for (const h of ['ลองใช้ใน 5 นาที', 'ใช้งาน 10 ขั้น', 'คำศัพท์ที่ควรรู้', 'ถามตอบ', 'คู่มือฉบับ PDF']) {
     assert(await p.getByRole('heading', { level: 2, name: new RegExp(h) }).isVisible(), `หน้าวิธีใช้: มีหัวข้อ "${h}"`);
   }
+  assert((await p.locator('.man-quick > li').count()) === 10, 'ใช้งาน 10 ขั้น: มี 10 ขั้นเรียงกัน');
+  await p.locator('.man-quick img').last().scrollIntoViewIfNeeded();
+  await p.waitForFunction(() => [...document.querySelectorAll('.man-quick img')].every((i) => i.complete && i.naturalWidth > 0), null, { timeout: 20000 });
+  assert((await p.locator('.man-quick img').count()) === 11, 'ภาพประกอบ 11 ภาพโหลดครบ (ไม่เสีย)');
+  const helpText = await p.locator('main').innerText();
+  assert(!helpText.includes('**') && !/`/.test(helpText), 'หน้าวิธีใช้ไม่มีเครื่องหมาย ** หรือ ` หลงเหลือ (แสดงตัวหนาถูกต้อง)');
+  assert(await p.locator('#man-s6').getByText('วิชาเสรี').first().isVisible(), 'ขั้น 6 มีคำอธิบายวิชาเสรี (หลายห้อง/หลายอาคาร)');
   assert((await p.locator('details.man-sec').count()) === 12, 'คู่มือฉบับเต็มมี 12 หัวข้อ');
   assert((await p.locator('details.man-sec[open]').count()) === 0, 'เริ่มต้นย่อไว้ทุกหัวข้อ');
   await p.locator('.man-toc button', { hasText: 'กรณีพิเศษ' }).first().click();
@@ -132,6 +139,8 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
   assert(await p.locator('#man-special').getByText('ทุกวันคาบที่ 1').first().isVisible(), 'กดสารบัญ -> หัวข้อ "กรณีพิเศษ" กางพร้อมตารางตัวอย่าง');
   await p.locator('.man-toc button', { hasText: 'กางทั้งหมด' }).click();
   assert((await p.locator('details.man-sec[open]').count()) === 12, '"กางทั้งหมด" กางครบ 12 หัวข้อ');
+  const allText = await p.locator('main').innerText();
+  assert(!allText.includes('**') && !/`/.test(allText), 'หลังกางคู่มือฉบับเต็มทั้งหมด ก็ไม่มีเครื่องหมาย ** หรือ ` หลงเหลือ');
   assert(await p.locator('#man-trouble').getByText('เปิดเว็บแล้วข้อมูลหาย').isVisible(), 'หัวข้อแก้ปัญหามีตารางอาการ-สาเหตุ-วิธีแก้');
   assert((await p.locator('.help-faq').count()) >= 8, `ถามตอบ ${await p.locator('.help-faq').count()} ข้อ`);
   const faq = p.locator('.help-faq').first();

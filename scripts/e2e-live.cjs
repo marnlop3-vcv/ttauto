@@ -53,7 +53,7 @@ const assert = (c, m) => { if (!c) { failed++; console.error('✗ FAIL:', m); pr
   // ===== 2) ผู้ดูแล: ข้อมูลตัวอย่างเล็ก + จัดตาราง (Web Worker บนโดเมนจริง) =====
   await p.getByRole('button', { name: /ใช้งานเป็นผู้ดูแล/ }).click();
   assert(await p.locator('.guide').getByText('เริ่มต้นใช้งาน').isVisible(), 'ผู้ดูแล: เห็นการ์ดเริ่มต้นใช้งาน');
-  assert(await p.locator('.site-foot').innerText().then((t) => /v1\.7\.0/.test(t) && /MIT/.test(t)), 'ท้ายหน้า: เวอร์ชัน 1.7.0 และ MIT');
+  assert(await p.locator('.site-foot').innerText().then((t) => /v1\.7\.1/.test(t) && /MIT/.test(t)), 'ท้ายหน้า: เวอร์ชัน 1.7.1 และ MIT');
   await p.locator('.nav a', { hasText: 'กรอกข้อมูล' }).click();
   await p.getByRole('button', { name: /^เล็ก/ }).click();
   await p.locator('.nav a', { hasText: 'Dashboard' }).click();

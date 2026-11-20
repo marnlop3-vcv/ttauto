@@ -293,3 +293,19 @@ a.btn.primary { color: #fff; }
 .man-table td, .man-table th { vertical-align: top; }
 .man-table td:first-child { font-weight: 600; }
 @media (max-width: 700px) { .man-table { min-width: 520px; } }
+
+/* ===== ใช้งาน 10 ขั้น ===== */
+.man-quick { list-style: none; margin: 12px 0 0; padding: 0; }
+.man-quick > li { padding: 16px 0; border-top: 1px solid var(--line); }
+.man-quick > li:first-child { border-top: 0; }
+.man-quick-head { display: flex; align-items: center; gap: 12px; }
+.man-quick-head h3 { margin: 0; font-size: 18px; }
+.man-quick-body { margin-left: 40px; }
+.help-no { flex: 0 0 28px; }
+.man-key { color: var(--accent); }
+.man-fig { margin: 12px 0; text-align: center; }
+.man-fig img { max-width: 100%; height: auto; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.man-fig figcaption { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.man-figs { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: flex-start; }
+.man-figs .man-fig { flex: 1 1 240px; max-width: 320px; margin: 8px 0; }
+@media (max-width: 700px) { .man-quick-body { margin-left: 0; } }
