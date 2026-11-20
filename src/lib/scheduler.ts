@@ -1,5 +1,6 @@
 import {
   Assignment, Building, Group, Metrics, PlacedEntry, Schedule, Settings, SpecialCase, SpecialSlot, Subject, Teacher, Unplaced,
+  roomKeyOf, roomsOf,
 } from '../types';
 import { parseCondition } from './thaiRuleParser';
 
@@ -181,10 +182,11 @@ export class SchedulerEngine {
     // ---- หน่วยงาน (รวม/แยก) ----
     const byKey = new Map<string, Unit>();
     const mkUnit = (members: Member[], a: Assignment, teachers: string[], groupIds: string[], need: number): Unit => {
-      const roomKey = `r:${a.room.buildingId}:${a.room.floor}:${a.room.no}`;
+      // วิชาเสรี: ใช้ได้หลายห้อง/หลายอาคารพร้อมกัน ทุกห้องต้องว่างในคาบเดียวกัน
+      const roomKeys = roomsOf(a).map((r) => `r:${roomKeyOf(r)}`);
       const u: Unit = {
         idx: this.units.length, members, need, subjectId: a.subjectId, multi: false,
-        res: [...new Set([...teachers, ...groupIds.map((g) => `g:${g}`), roomKey])].map((k) => this.resId(k)),
+        res: [...new Set([...teachers, ...groupIds.map((g) => `g:${g}`), ...roomKeys])].map((k) => this.resId(k)),
       };
       this.units.push(u);
       return u;
@@ -193,7 +195,7 @@ export class SchedulerEngine {
       const sub = this.subjectById.get(a.subjectId);
       if (!sub || sub.periodsPerWeek < 1) continue;
       const teachers = [...new Set([...a.mainTeacherIds, ...a.coTeacherIds].map(tKey))];
-      const roomKey = `${a.room.buildingId}:${a.room.floor}:${a.room.no}`;
+      const roomKey = roomsOf(a).map(roomKeyOf).sort().join('+');
       if (a.together === false) {
         for (const g of a.groupIds) mkUnit([{ a, groupIds: [g] }], a, teachers, [g], sub.periodsPerWeek);
         continue;

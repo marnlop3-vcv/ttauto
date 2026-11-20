@@ -1,4 +1,5 @@
-import { DAY_NAMES, roomLabel, Assignment } from '../types';
+import { DAY_NAMES, roomLabel, roomKeyOf, roomsOf, Assignment } from '../types';
+import { placeText } from './rooms';
 import type { DataState } from '../store';
 
 export type ViewKind = 'teacher' | 'group' | 'building';
@@ -71,7 +72,7 @@ export function buildGrid(kind: ViewKind, id: string, d: DataState): GridData | 
   const relevant = (a: Assignment) =>
     kind === 'teacher' ? [...a.mainTeacherIds, ...a.coTeacherIds].some((t) => teacherName(t) === id)
     : kind === 'group' ? true // กรองด้วย entry.groupIds
-    : a.room.buildingId === id;
+    : roomsOf(a).some((r) => r.buildingId === id);
 
   const byId = new Map(d.assignments.map((a) => [a.id, a]));
   const slots = new Map<string, CellItem[]>();
@@ -99,7 +100,8 @@ export function buildGrid(kind: ViewKind, id: string, d: DataState): GridData | 
     for (const e of schedule.entries) {
       const a = byId.get(e.assignmentId);
       if (!a || !relevant(a)) continue;
-      const place = `${buildingName(a.room.buildingId)} ห้อง ${roomLabel(a.room)}`;
+      const allRooms = roomsOf(a);
+      const place = placeText(allRooms, buildingName); // วิชาเสรี: แสดงทุกห้อง/ทุกอาคารที่ใช้พร้อมกัน
       const subj = subjectName(a.subjectId);
       if (kind === 'group') {
         if (!(e.groupIds ?? []).includes(id)) continue;
@@ -110,7 +112,7 @@ export function buildGrid(kind: ViewKind, id: string, d: DataState): GridData | 
         continue;
       }
       const tn = [...new Set([...a.mainTeacherIds, ...a.coTeacherIds].map((t) => teacherName(t)))].sort().join(',');
-      const key = `${e.day}-${e.period}|${a.subjectId}|${roomLabel(a.room)}|${a.room.buildingId}|${tn}`;
+      const key = `${e.day}-${e.period}|${a.subjectId}|${allRooms.map(roomKeyOf).sort().join('+')}|${tn}`;
       const cur = agg.get(key) ?? { a, day: e.day, period: e.period, groups: new Set<string>(), tn };
       (e.groupIds ?? []).forEach((g) => cur.groups.add(g));
       agg.set(key, cur);
@@ -118,15 +120,23 @@ export function buildGrid(kind: ViewKind, id: string, d: DataState): GridData | 
     for (const { a, day, period, groups, tn } of agg.values()) {
       const subj = subjectName(a.subjectId);
       const gNames = [...groups].map(groupName).filter(Boolean).join(', ');
-      const place = `${buildingName(a.room.buildingId)} ห้อง ${roomLabel(a.room)}`;
+      const allRooms = roomsOf(a);
+      const place = placeText(allRooms, buildingName);
+      const roomsHere = allRooms.filter((r) => r.buildingId === id); // มุมมองอาคาร: เฉพาะห้องของอาคารนี้
+      const roomsKey = allRooms.map(roomKeyOf).sort().join('+');
       const main = a.mainTeacherIds.map(teacherName).filter(Boolean) as string[];
       const co = a.coTeacherIds.map(teacherName).filter(Boolean) as string[];
       const teachers = [...main, ...co.map((n) => `${n} (ร่วม)`)].join(', ');
       const gKey = [...groups].sort().join('+');
       if (kind === 'teacher') {
-        push(day, period, { kind: 'class', key: `t:${a.subjectId}:${roomLabel(a.room)}:${a.room.buildingId}:${gKey}`, title: subj, lines: [gNames, place] }, subj);
+        push(day, period, { kind: 'class', key: `t:${a.subjectId}:${roomsKey}:${gKey}`, title: subj, lines: [gNames, place] }, subj);
       } else {
-        push(day, period, { kind: 'class', key: `b:${a.subjectId}:${roomLabel(a.room)}:${tn}:${gKey}`, title: `${subj} [${roomLabel(a.room)}]`, lines: [teachers, gNames] }, `ห้อง ${roomLabel(a.room)}`);
+        const here = roomsHere.map(roomLabel).join(', ');
+        const labels = roomsHere.map((r) => `ห้อง ${roomLabel(r)}`);
+        const others = allRooms.length > roomsHere.length ? [`ใช้พร้อมกับ ${placeText(allRooms.filter((r) => r.buildingId !== id), buildingName)}`] : [];
+        push(day, period, { kind: 'class', key: `b:${a.subjectId}:${roomsKey}:${tn}:${gKey}`, title: `${subj} [${here}]`, lines: [teachers, gNames, ...others] }, labels[0]);
+        // นับการใช้งานรายห้อง: ห้องที่ 2 เป็นต้นไปในอาคารนี้
+        labels.slice(1).forEach((l) => counts.set(l, (counts.get(l) ?? 0) + 1));
       }
     }
   }

@@ -19,7 +19,10 @@ export interface Assignment {
   mainTeacherIds: string[];
   coTeacherIds: string[];
   groupIds: string[];
+  /** ห้องหลัก (บังคับ) */
   room: RoomRef;
+  /** ห้องเพิ่มเติมที่ใช้พร้อมกัน เช่น วิชาเสรีที่นักเรียนแต่ละคนแยกไปเรียนคนละห้อง/คนละอาคาร (ไม่บังคับ; ข้อมูลเก่าไม่มีฟิลด์นี้) */
+  extraRooms?: RoomRef[];
   /** true = กลุ่มเรียนที่เลือก (และกำหนดการอื่นที่ วิชา/ครู/ห้อง เดียวกันที่เลือกเรียนรวมเช่นกัน) เรียนพร้อมกัน; false = แยกเรียนทีละกลุ่ม */
   together: boolean;
 }
@@ -57,5 +60,17 @@ export interface Schedule {
 }
 
 export const DAY_NAMES = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
+
+export const roomKeyOf = (r: RoomRef) => `${r.buildingId}:${r.floor}:${r.no}`;
+/** ห้องทั้งหมดของกำหนดการเรียน (ห้องหลัก + ห้องเพิ่มเติม ตัดซ้ำ) — ทุกห้องถูกใช้พร้อมกันในคาบเดียวกัน */
+export function roomsOf(a: { room: RoomRef; extraRooms?: RoomRef[] }): RoomRef[] {
+  const seen = new Set<string>();
+  const out: RoomRef[] = [];
+  for (const r of [a.room, ...(a.extraRooms ?? [])]) {
+    const k = roomKeyOf(r);
+    if (!seen.has(k)) { seen.add(k); out.push(r); }
+  }
+  return out;
+}
 
 export const roomLabel = (r: RoomRef) => `${r.floor}${String(r.no).padStart(2, '0')}`;

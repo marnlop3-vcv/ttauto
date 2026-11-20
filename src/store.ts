@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import {
-  Assignment, Building, Group, Schedule, Settings, SpecialCase, Subject, Teacher,
+  Assignment, Building, Group, Schedule, Settings, SpecialCase, Subject, Teacher, roomsOf,
 } from './types';
 import { EntityKind } from './lib/entities';
 
@@ -42,7 +42,7 @@ const uses = (a: Assignment, kind: EntityKind, id: string) =>
   (kind === 'teachers' && (a.mainTeacherIds.includes(id) || a.coTeacherIds.includes(id))) ||
   (kind === 'groups' && a.groupIds.includes(id)) ||
   (kind === 'subjects' && a.subjectId === id) ||
-  (kind === 'buildings' && a.room.buildingId === id);
+  (kind === 'buildings' && roomsOf(a).some((r) => r.buildingId === id));
 
 export const useStore = create<DataState & Actions>()(
   persist(
@@ -63,15 +63,20 @@ export const useStore = create<DataState & Actions>()(
           assignments = assignments
             .map((a) => {
               if (!uses(a, kind, id)) return a;
-              return {
+              const out = {
                 ...a,
                 mainTeacherIds: a.mainTeacherIds.filter((x) => x !== id),
                 coTeacherIds: a.coTeacherIds.filter((x) => x !== id),
                 groupIds: a.groupIds.filter((x) => x !== id),
               };
+              if (kind === 'buildings') {
+                // ตัดห้องของอาคารที่ถูกลบออก; ถ้ายังเหลือห้องอื่น (วิชาเสรีหลายอาคาร) ก็ยังคงใช้ต่อได้
+                const left = roomsOf(a).filter((r) => r.buildingId !== id);
+                if (left.length) { out.room = left[0]; out.extraRooms = left.slice(1); } else (out as any).room = null;
+              }
+              return out;
             })
-            .filter((a) => a.mainTeacherIds.length && a.groupIds.length && !(kind === 'subjects' && a.subjectId === id) &&
-              !(kind === 'buildings' && a.room.buildingId === id));
+            .filter((a) => a.mainTeacherIds.length && a.groupIds.length && a.room && !(kind === 'subjects' && a.subjectId === id));
         }
         const patch: any = {
           [kind]: (st[kind] as any[]).filter((x) => x.id !== id),

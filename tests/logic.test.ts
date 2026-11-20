@@ -271,3 +271,84 @@ describe('เลือกเรียนรวม/แยกที่กำหน
     expect(out.merged).toBe(0);
   });
 });
+
+// ================= วิชาเสรี: กำหนดการเรียนเลือกได้หลายห้อง/หลายอาคารพร้อมกัน =================
+import { roomsOf, roomKeyOf } from '../src/types';
+import { placeText } from '../src/lib/rooms';
+import { buildGrid, cellText } from '../src/lib/views';
+import { useStore } from '../src/store';
+
+describe('วิชาเสรี: หลายห้อง/หลายอาคารพร้อมกัน', () => {
+  const buildings: Building[] = [{ id: 'bA', name: 'อาคาร A', floors: 2, roomsPerFloor: 3 }, { id: 'bB', name: 'อาคาร B', floors: 2, roomsPerFloor: 3 }];
+  const teachers: Teacher[] = ['ครูเสรี1', 'ครูเสรี2', 'ครูเสรี3', 'ครูอื่น1', 'ครูอื่น2'].map((name, i) => ({ id: `t${i}`, name, role: 'main' as const }));
+  const groups: Group[] = ['ก', 'ข', 'ค', 'ง'].map((n, i) => ({ id: `g${i}`, code: `G${i}`, name: `กลุ่ม${n}`, major: '' }));
+  const subjects: Subject[] = [
+    { id: 'free', code: 'F1', name: 'วิชาเสรี', periodsPerWeek: 3 },
+    { id: 'other', code: 'O1', name: 'วิชาปกติ', periodsPerWeek: 4 },
+  ];
+  const R = (b: string, floor: number, no: number) => ({ buildingId: b, floor, no });
+  const freeRooms = [R('bA', 1, 1), R('bA', 1, 2), R('bB', 2, 3)];
+  const mk = (): Assignment[] => [
+    // วิชาเสรี: 3 ครู × 3 กลุ่ม เรียนพร้อมกัน แยกไป 3 ห้อง (2 อาคาร)
+    { id: 'af', subjectId: 'free', mainTeacherIds: ['t0', 't1', 't2'], coTeacherIds: [], groupIds: ['g0', 'g1', 'g2'], room: freeRooms[0], extraRooms: freeRooms.slice(1), together: true },
+    // วิชาอื่นที่ใช้ห้องเดียวกับห้องใดห้องหนึ่งของวิชาเสรี -> ต้องไม่ซ้อนเวลา
+    { id: 'ao1', subjectId: 'other', mainTeacherIds: ['t3'], coTeacherIds: [], groupIds: ['g3'], room: freeRooms[2], together: true },
+    { id: 'ao2', subjectId: 'other', mainTeacherIds: ['t4'], coTeacherIds: [], groupIds: ['g3'], room: freeRooms[1], together: true },
+  ];
+  const run = () => generateSchedule({ settings, teachers, groups, subjects, buildings, specialCases: [], assignments: mk() }, { seed: 4 });
+
+  it('roomsOf: ข้อมูลเก่า (ไม่มี extraRooms) ได้ห้องเดียว และตัดห้องซ้ำ', () => {
+    expect(roomsOf({ room: freeRooms[0] })).toEqual([freeRooms[0]]);
+    expect(roomsOf({ room: freeRooms[0], extraRooms: [freeRooms[0], freeRooms[1]] }).map(roomKeyOf)).toEqual([roomKeyOf(freeRooms[0]), roomKeyOf(freeRooms[1])]);
+  });
+
+  it('จัดครบ: ทุกคาบของวิชาเสรีอยู่ช่องเวลาเดียวกันสำหรับทุกกลุ่ม (3 คาบติดกัน)', () => {
+    const out = run();
+    expect(out.unplaced).toHaveLength(0);
+    const free = out.entries.filter((e) => e.assignmentId === 'af');
+    expect(free).toHaveLength(3);
+    expect(new Set(free.map((e) => e.day)).size).toBe(1);
+    expect(free.every((e) => e.groupIds.length === 3)).toBe(true);
+  });
+
+  it('จองทุกห้องพร้อมกัน: วิชาอื่นที่ใช้ห้องใดห้องหนึ่งของวิชาเสรีไม่ซ้อนเวลา', () => {
+    const out = run();
+    const slot = (e: { day: number; period: number }) => `${e.day}-${e.period}`;
+    const freeSlots = new Set(out.entries.filter((e) => e.assignmentId === 'af').map(slot));
+    for (const e of out.entries.filter((x) => x.assignmentId !== 'af')) expect(freeSlots.has(slot(e))).toBe(false);
+  });
+
+  it('มุมมองตาราง: กลุ่ม/ครูเห็นทุกอาคารที่ใช้พร้อมกัน, มุมมองอาคารแต่ละแห่งเห็นวิชาเสรีในช่วงเวลาเดียวกัน', () => {
+    const schedule = run();
+    const d: any = { settings, teachers, groups, subjects, buildings, specialCases: [], assignments: mk(), schedule, stale: false };
+    const text = (kind: any, id: string) => buildGrid(kind, id, d)!.rows.flatMap((r) => r.cells.flatMap((c) => (c.items.length ? [cellText(c.items)] : []))).join('\n---\n');
+    const g = text('group', 'g0');
+    expect(g).toContain('อาคาร A ห้อง 101, 102');
+    expect(g).toContain('อาคาร B ห้อง 203');
+    expect(text('teacher', 'ครูเสรี2')).toContain('อาคาร B ห้อง 203');
+    const a = text('building', 'bA'), b = text('building', 'bB');
+    expect(a).toContain('วิชาเสรี [101, 102]');
+    expect(a).toContain('ใช้พร้อมกับ อาคาร B ห้อง 203');
+    expect(b).toContain('วิชาเสรี [203]');
+    // ตำแหน่งในตาราง (วัน/คาบ) ของวิชาเสรีตรงกันทุกมุมมอง
+    const where = (kind: any, id: string) => buildGrid(kind, id, d)!.rows.flatMap((r, ri) => r.cells.filter((c) => c.items.some((i) => i.title.startsWith('วิชาเสรี'))).map((c) => `${ri}:${c.from}`));
+    expect(where('building', 'bA')).toEqual(where('building', 'bB'));
+    expect(where('group', 'g0')).toEqual(where('building', 'bA'));
+  });
+
+  it('ห้องเดียว: ข้อความสถานที่เหมือนเดิม', () => {
+    expect(placeText([freeRooms[0]], () => 'อาคาร A')).toBe('อาคาร A ห้อง 101');
+  });
+
+  it('ลบอาคารหนึ่ง: ห้องของอาคารนั้นถูกตัดออก แต่กำหนดการยังอยู่ถ้ายังมีห้องอื่น; ถ้าไม่เหลือเลยจึงลบ', () => {
+    const st = useStore.getState();
+    st.replaceAll({ settings, teachers, groups, subjects, buildings, specialCases: [], assignments: mk() } as any);
+    const r1 = useStore.getState().remove('buildings', 'bB');
+    const af = useStore.getState().assignments.find((a) => a.id === 'af')!;
+    expect(roomsOf(af).map(roomKeyOf)).toEqual([roomKeyOf(freeRooms[0]), roomKeyOf(freeRooms[1])]);
+    expect(useStore.getState().assignments.some((a) => a.id === 'ao1')).toBe(false); // ห้องเดียวอยู่ในอาคาร B -> ถูกลบ
+    expect(r1.assignmentsRemoved).toBe(1);
+    useStore.getState().remove('buildings', 'bA');
+    expect(useStore.getState().assignments.some((a) => a.id === 'af')).toBe(false);
+  });
+});

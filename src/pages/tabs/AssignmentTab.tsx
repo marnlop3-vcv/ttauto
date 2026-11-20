@@ -2,7 +2,8 @@ import { useState } from 'react';
 import DataTable from '../../components/DataTable';
 import { SearchMulti, SearchSelect } from '../../components/Search';
 import { useStore } from '../../store';
-import { roomLabel } from '../../types';
+import { placeText } from '../../lib/rooms';
+import { roomKeyOf, roomLabel, roomsOf, RoomRef } from '../../types';
 
 export default function AssignmentTab() {
   const { teachers, groups, subjects, buildings, assignments, addAssignment, removeAssignment } = useStore();
@@ -12,28 +13,44 @@ export default function AssignmentTab() {
   const [subjectId, setSubjectId] = useState('');
   const [buildingId, setBuildingId] = useState('');
   const [roomVal, setRoomVal] = useState(''); // "floor:no"
+  const [rooms, setRooms] = useState<RoomRef[]>([]); // ห้องที่เลือกไว้แล้ว (หลายห้อง/หลายอาคารพร้อมกันได้ — วิชาเสรี)
   const [together, setTogether] = useState(true);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
-    const b = buildings.find((x) => x.id === buildingId);
+  const b = buildings.find((x) => x.id === buildingId);
   const roomOptions = b
     ? Array.from({ length: b.floors }, (_, f) => Array.from({ length: b.roomsPerFloor }, (_, r) => ({
         value: `${f + 1}:${r + 1}`, label: `ห้อง ${roomLabel({ buildingId: b.id, floor: f + 1, no: r + 1 })} (ชั้น ${f + 1})`,
       }))).flat()
     : [];
 
+  const bName = (id: string) => buildings.find((x) => x.id === id)?.name ?? '?';
+  /** ห้องที่กำลังเลือกอยู่ในช่อง (ยังไม่ได้กดเพิ่ม) */
+  const pending = (): RoomRef | null => {
+    if (!b || !roomVal) return null;
+    const [floor, no] = roomVal.split(':').map(Number);
+    return { buildingId: b.id, floor, no };
+  };
+  const addRoom = () => {
+    const r = pending();
+    if (!r) return setMsg({ ok: false, text: 'เลือกอาคารและห้องก่อน แล้วจึงกด "＋ เพิ่มห้อง"' });
+    if (rooms.some((x) => roomKeyOf(x) === roomKeyOf(r))) return setMsg({ ok: false, text: 'ห้องนี้เลือกไว้แล้ว' });
+    setRooms([...rooms, r]); setRoomVal(''); setMsg(null);
+  };
+
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!subjectId) return setMsg({ ok: false, text: 'กรุณาเลือกวิชาเรียน' });
     if (!main.length) return setMsg({ ok: false, text: 'กรุณาเลือกครูสอนหลักอย่างน้อย 1 คน' });
     if (!grp.length) return setMsg({ ok: false, text: 'กรุณาเลือกกลุ่มเรียนอย่างน้อย 1 กลุ่ม' });
-    if (!b || !roomVal) return setMsg({ ok: false, text: 'กรุณาเลือกอาคารและห้องเรียน' });
-    const [floor, no] = roomVal.split(':').map(Number);
+    const p = pending();
+    const list = p && !rooms.some((x) => roomKeyOf(x) === roomKeyOf(p)) ? [...rooms, p] : rooms; // ห้องที่เลือกค้างไว้ในช่อง นับรวมให้ด้วย
+    if (!list.length) return setMsg({ ok: false, text: 'กรุณาเลือกอาคารและห้องเรียนอย่างน้อย 1 ห้อง' });
     const dup = assignments.find((a) => a.subjectId === subjectId && a.groupIds.some((g) => grp.includes(g)));
     if (dup && !window.confirm('มีกำหนดการเรียนของวิชานี้กับกลุ่มเรียนที่เลือกอยู่แล้ว ต้องการเพิ่มซ้ำหรือไม่ (คาบจะถูกนับซ้ำ)?')) return;
-    addAssignment({ subjectId, mainTeacherIds: main, coTeacherIds: co, groupIds: grp, room: { buildingId: b.id, floor, no }, together });
-    setMain([]); setCo([]); setGrp([]); setRoomVal('');
-    setMsg({ ok: true, text: 'บันทึกกำหนดการเรียนเรียบร้อย' });
+    addAssignment({ subjectId, mainTeacherIds: main, coTeacherIds: co, groupIds: grp, room: list[0], ...(list.length > 1 ? { extraRooms: list.slice(1) } : {}), together });
+    setMain([]); setCo([]); setGrp([]); setRoomVal(''); setRooms([]);
+    setMsg({ ok: true, text: `บันทึกกำหนดการเรียนเรียบร้อย${list.length > 1 ? ` (ใช้ ${list.length} ห้องพร้อมกัน)` : ''}` });
   };
 
   const nameT = (id: string) => teachers.find((t) => t.id === id)?.name ?? '?';
@@ -62,7 +79,7 @@ export default function AssignmentTab() {
                 onChange={setGrp} empty="ยังไม่มีกลุ่มเรียน" />
             </div>
           </div>
-          <div className="form-row" style={{ marginTop: 14 }}>
+          <div className="form-row" style={{ marginTop: 14, alignItems: 'flex-end' }}>
             <div className="field">อาคาร
               <SearchSelect value={buildingId} onChange={(v) => { setBuildingId(v); setRoomVal(''); }} placeholder="พิมพ์ชื่ออาคาร…"
                 options={buildings.map((x) => ({ value: x.id, label: x.name }))} />
@@ -70,6 +87,18 @@ export default function AssignmentTab() {
             <div className="field">ห้อง
               <SearchSelect value={roomVal} onChange={setRoomVal} disabled={!b} width={220} placeholder={b ? 'พิมพ์เลขห้อง เช่น 203…' : 'เลือกอาคารก่อน'} options={roomOptions} />
             </div>
+            <button type="button" className="btn" onClick={addRoom} title="เพิ่มห้องนี้เข้ารายการ (เลือกได้หลายห้อง/หลายอาคาร)">＋ เพิ่มห้อง</button>
+          </div>
+          {rooms.length > 0 && (
+            <div className="sm-chips" style={{ marginTop: 8 }} aria-label="ห้องที่เลือกไว้">
+              {rooms.map((r) => (
+                <span key={roomKeyOf(r)} className="chip">{placeText([r], bName)} <button type="button" className="x" aria-label="เอาออก" onClick={() => setRooms(rooms.filter((x) => roomKeyOf(x) !== roomKeyOf(r)))}>×</button></span>
+              ))}
+            </div>
+          )}
+          <div className="hint">
+            ห้องเดียว: เลือกอาคารและห้อง แล้วกดบันทึกได้เลย • <b>วิชาเสรี</b> (นักเรียนแต่ละคนแยกไปเรียนคนละห้อง/คนละอาคารในคาบเดียวกัน): กด "＋ เพิ่มห้อง" ให้ครบทุกห้องที่ใช้
+            ระบบจะจองทุกห้องพร้อมกัน และแสดงครู กลุ่มเรียน และทุกอาคารในคาบเดียวกัน (เลือกครูสอนหลักหลายคนและกลุ่มเรียนที่เข้าร่วมด้วย)
           </div>
           <div className="field" style={{ marginTop: 14 }}>การเรียนของกลุ่มเรียนที่เลือก
             <div className="radio-row">
@@ -97,7 +126,7 @@ export default function AssignmentTab() {
             { header: 'ครู', render: (a) => <>{a.mainTeacherIds.map((id) => <span className="chip" key={id}>{nameT(id)}</span>)}{a.coTeacherIds.map((id) => <span className="chip co" key={id}>{nameT(id)} (ร่วม)</span>)}</> },
             { header: 'กลุ่มเรียน', render: (a) => a.groupIds.map((id) => <span className="chip" key={id}>{groups.find((g) => g.id === id)?.name}</span>) },
             { header: 'การเรียน', render: (a) => <span className={`chip ${a.together ? '' : 'co'}`}>{a.together ? 'เรียนรวมกัน' : 'แยกเรียน'}</span>, width: '120px' },
-            { header: 'ห้องเรียน', render: (a) => `${buildings.find((x) => x.id === a.room.buildingId)?.name ?? '?'} ห้อง ${roomLabel(a.room)}` },
+            { header: 'ห้องเรียน', render: (a) => { const rs = roomsOf(a); return <>{placeText(rs, bName)}{rs.length > 1 && <span className="chip co" style={{ marginLeft: 6 }}>{rs.length} ห้องพร้อมกัน</span>}</>; } },
           ]}
         />
       </div>
