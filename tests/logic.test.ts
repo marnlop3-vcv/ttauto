@@ -185,12 +185,54 @@ describe('วิชาไม่เกิน 4 คาบ = ช่วงเดี�
       expect(settings.lunchAfter > 0 && ps[0] <= settings.lunchAfter && ps[ps.length - 1] > settings.lunchAfter).toBe(false);
     }
   });
-  it('วิชา 6 คาบ -> กระจาย ไม่เกิน 2 คาบต่อวัน', () => {
-    const out = generateSchedule({ settings, ...mini(6), specialCases: [] }, { seed: 3 });
-    const cnt = new Map<number, number>();
-    out.entries.forEach((e) => cnt.set(e.day, (cnt.get(e.day) ?? 0) + 1));
-    expect(out.entries).toHaveLength(6);
-    expect(Math.max(...cnt.values())).toBeLessThanOrEqual(2);
+  // วิชาเกิน 4 คาบ: แบ่งเป็นช่วงติดกัน ช่วงละไม่เกิน 4 ใช้จำนวนช่วงน้อยสุดและแบ่งเท่าๆ กัน
+  const runsOf = (out: ReturnType<typeof generateSchedule>) => {
+    const byDay = new Map<number, number[]>();
+    out.entries.forEach((e) => byDay.set(e.day, [...(byDay.get(e.day) ?? []), e.period]));
+    const runs: number[] = [];
+    for (const ps of byDay.values()) {
+      ps.sort((x, y) => x - y);
+      let len = 0;
+      ps.forEach((p, i) => {
+        const cont = i > 0 && p === ps[i - 1] + 1 && p !== settings.lunchAfter + 1; // พักเที่ยงตัดช่วง
+        if (cont) len++; else { if (len) runs.push(len); len = 1; }
+      });
+      runs.push(len);
+    }
+    return runs.sort((x, y) => y - x);
+  };
+  const expected: Record<number, number[]> = { 5: [3, 2], 6: [3, 3], 7: [4, 3], 8: [4, 4], 9: [3, 3, 3], 10: [4, 3, 3] };
+  for (const n of [5, 6, 7, 8, 9, 10]) {
+    it(`วิชา ${n} คาบ -> แบ่งเป็น ${expected[n].join('+')} (แต่ละช่วงติดกัน ไม่เกิน 4 ไม่ข้ามพักเที่ยง)`, () => {
+      for (let seed = 1; seed <= 3; seed++) {
+        const out = generateSchedule({ settings, ...mini(n), specialCases: [] }, { seed, timeLimitMs: 300 });
+        expect(out.entries).toHaveLength(n);
+        expect(out.unplaced).toHaveLength(0);
+        expect(runsOf(out)).toEqual(expected[n]);
+      }
+    });
+  }
+  it('ช่วงของวิชาเดียวกันไม่ชิดกันจนยาวเกิน 4 คาบ (เช่น 3+2 ต่อกันเป็น 5)', () => {
+    for (let seed = 1; seed <= 4; seed++) {
+      const w = world(6);
+      w.subjects.forEach((sb, i) => { sb.periodsPerWeek = [5, 6, 7, 3, 3][i]; }); // มีวิชาเกิน 4 คาบหลายวิชา
+      const out = generateSchedule({ settings, ...w, specialCases: [] }, { seed, timeLimitMs: 800 });
+      expect(out.unplaced).toHaveLength(0);
+      const per = new Map<string, number[]>();
+      const bySub = new Map<string, string>();
+      out.entries.forEach((e) => { const k = `${e.groupIds[0]}|${e.assignmentId}|${e.day}`; per.set(k, [...(per.get(k) ?? []), e.period]); bySub.set(k, e.assignmentId); });
+      for (const ps of per.values()) {
+        ps.sort((x, y) => x - y);
+        let len = 1;
+        for (let i = 1; i < ps.length; i++) { len = ps[i] === ps[i - 1] + 1 && ps[i] !== settings.lunchAfter + 1 ? len + 1 : 1; expect(len).toBeLessThanOrEqual(4); }
+      }
+    }
+  });
+  it('ครึ่งวันสั้นกว่า 4 คาบ: แบ่งช่วงให้พอดีครึ่งวัน และแจ้งเตือน', () => {
+    const short: Settings = { days: [0, 1, 2, 3, 4], lunchAfter: 2, periods: Array.from({ length: 5 }, (_, i) => ({ start: `0${8 + i}:00`.slice(-5), end: `0${9 + i}:00`.slice(-5) })) };
+    const out = generateSchedule({ settings: short, ...mini(4), specialCases: [] }, { seed: 1, timeLimitMs: 300 });
+    expect(out.unplaced).toHaveLength(0);
+    expect((out.warnings ?? []).join(' ')).toContain('ช่วงเรียนต่อเนื่องมีได้สูงสุด 3 คาบ');
   });
   it('ถ้าติดกันไม่ได้จริง (ช่วงว่างติดกันไม่พอ) -> แยกช่วงและแจ้งเตือน', () => {
     const w = mini(4);

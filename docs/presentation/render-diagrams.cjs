@@ -98,7 +98,7 @@ const unitsHtml = `<div class="fig" id="units">
   <div style="flex:1">
    <div class="small" style="margin-bottom:4px"><b>ชิ้นงาน (Piece): สิ่งที่วางลงตาราง</b></div>
    <div class="box green" style="margin-bottom:8px"><b>U1 (2 คาบ ≤ 4)</b><span class="tile" style="background:#2E9E6B;width:96px">2 คาบติดกัน</span></div>
-   <div class="box amber"><b>U2 (6 คาบ &gt; 4)</b><span class="tile" style="background:#F2A93B;color:#1F2937">1</span><span class="tile" style="background:#F2A93B;color:#1F2937">1</span><span class="tile" style="background:#F2A93B;color:#1F2937">1</span><span class="tile" style="background:#F2A93B;color:#1F2937">1</span><span class="tile" style="background:#F2A93B;color:#1F2937">1</span><span class="tile" style="background:#F2A93B;color:#1F2937">1</span><span class="small"><br>กระจายคนละวัน</span></div>
+   <div class="box amber"><b>U2 (6 คาบ &gt; 4)</b><span class="tile" style="background:#F2A93B;color:#1F2937;width:78px">3 คาบ</span><span class="tile" style="background:#F2A93B;color:#1F2937;width:78px">3 คาบ</span><span class="small"><br>แบ่งเป็น 3+3 คนละวัน</span></div>
   </div>
  </div>
  </div>`;

@@ -18,7 +18,7 @@ export interface SchedulerOptions {
   /** เวลาประมวลผลสูงสุด (มิลลิวินาที) ค่าเริ่มต้น 15 วินาที */
   timeLimitMs?: number;
   seed?: number;
-  /** วิชาที่มีคาบต่อสัปดาห์ไม่เกินค่านี้ จะถูกจัดเป็นช่วงเดียวติดกัน (ค่าเริ่มต้น 4) */
+  /** จำนวนคาบติดกันสูงสุดต่อ 1 ช่วง (ค่าเริ่มต้น 4) วิชาที่มากกว่านี้จะถูกแบ่งเป็นหลายช่วงที่ติดกันช่วงละไม่เกินค่านี้ */
   consecutiveMax?: number;
 }
 
@@ -38,7 +38,8 @@ export const WEIGHTS = {
   overload: 3,      // ครูสอนติดกันเกิน 4 คาบ (ต่อ 1 คาบที่เกิน; พักเที่ยงตัดช่วง)
   loadGroup: 0.4,   // ถ่วงภาระรายวันของกลุ่มเรียนให้สมดุล (ผลรวมกำลังสอง)
   loadTeacher: 0.15,
-  spread: 2,        // คาบของวิชาเดียวกันกระจุกวันเดียวกัน (ต่อคู่)
+  spread: 2,        // ช่วงของวิชาเดียวกันกระจุกวันเดียวกัน (ต่อคู่)
+  joined: 40,       // ช่วงของวิชาเดียวกันมาติดกันจนยาวเกินที่กำหนด (เช่น 3+2 ติดกัน = 5 คาบ) — ปรับหนักเพื่อให้เกิดน้อยที่สุด
   start: 0.03,      // ชอบคาบต้นๆ ของวันเล็กน้อย (ลดช่องว่าง)
 };
 const MAX_RUN = 4;
@@ -71,7 +72,8 @@ interface Piece { id: number; unit: Unit; size: number; di: number; start: numbe
  *
  *  0) ครูชื่อเดียวกันคนละหน้าที่ถือเป็นคนเดียวกัน
  *     กำหนดการ "เรียนรวมกัน" ที่ วิชา+ครู+ห้อง เดียวกันถูกรวมเป็นหน่วยเดียว; "แยกเรียน" แตกเป็นหน่วยละกลุ่ม
- *  1) วิชาไม่เกิน 4 คาบ/สัปดาห์ = 1 ชิ้นติดกันต่อเนื่อง (ไม่ข้ามพักเที่ยง); วิชามากกว่านั้น = ชิ้นละ 1 คาบกระจายวัน
+ *  1) ทุกวิชาแบ่งเป็น "ชิ้น" ที่เป็นช่วงติดกัน ชิ้นละไม่เกิน 4 คาบ (ไม่ข้ามพักเที่ยง) ใช้จำนวนชิ้นน้อยสุดและแบ่งเท่าๆ กัน
+ *     เช่น 4 = 4, 5 = 3+2, 6 = 3+3, 7 = 4+3, 8 = 4+4; ชิ้นของวิชาเดียวกันพยายามอยู่คนละวัน
  *  2) วางกรณีพิเศษก่อน (ล็อกช่องเวลา) แล้ว Greedy วางทีละชิ้นที่ยากก่อน
  *  3) ชิ้นที่วางไม่ลง -> ย้ายชิ้นที่ขวางเป็นทอดๆ (Ejection chain + Tabu)
  *  4) Simulated Annealing: ย้าย/สลับชิ้นโดยรักษาข้อบังคับ (ครู/กลุ่ม/ห้องไม่ชน) ตลอด
@@ -220,16 +222,18 @@ export class SchedulerEngine {
     });
 
     // ---- ชิ้นงาน ----
-    const maxBlock = this.lunch > 0 ? Math.max(this.lunch, this.nP - this.lunch) : this.nP;
+    // ทุกวิชาถูกแบ่งเป็นช่วงที่ติดกัน ช่วงละไม่เกิน consecutiveMax คาบ (ค่าเริ่มต้น 4) และไม่ข้ามพักเที่ยง
+    //   ใช้จำนวนช่วงน้อยที่สุด แล้วแบ่งให้เท่าๆ กัน เช่น 3 -> 3, 4 -> 4, 5 -> 3+2, 6 -> 3+3, 7 -> 4+3, 8 -> 4+4, 9 -> 3+3+3
+    //   ช่วงของวิชาเดียวกันพยายามอยู่คนละวัน (ค่าปรับ spread)
+    const maxBlock = this.lunch > 0 ? Math.max(this.lunch, this.nP - this.lunch) : this.nP; // ช่วงที่ยาวที่สุดของวัน (ก่อน/หลังพักเที่ยง)
+    const cap = Math.max(1, Math.min(this.consecutiveMax, maxBlock));
     for (const u of this.units) {
-      let sizes: number[];
-      if (u.need <= this.consecutiveMax) {
-        const k = Math.ceil(u.need / maxBlock);
-        sizes = Array.from({ length: k }, (_, i) => Math.floor(u.need / k) + (i < u.need % k ? 1 : 0));
-        if (k > 1) {
-          this.warnings.push(`วิชา ${this.subjectById.get(u.subjectId)?.name} (${u.need} คาบ): ช่วงเรียนต่อเนื่องมีได้สูงสุด ${maxBlock} คาบ จึงต้องแยกเป็นหลายช่วง`);
-        }
-      } else sizes = Array.from({ length: u.need }, () => 1);
+      const k = Math.ceil(u.need / cap);
+      const sizes = Array.from({ length: k }, (_, i) => Math.floor(u.need / k) + (i < u.need % k ? 1 : 0));
+      if (k > Math.ceil(u.need / this.consecutiveMax)) {
+        // ต้องแบ่งมากกว่าปกติ เพราะครึ่งวันสั้นกว่าจำนวนคาบสูงสุดต่อช่วง
+        this.warnings.push(`วิชา ${this.subjectById.get(u.subjectId)?.name} (${u.need} คาบ): ช่วงเรียนต่อเนื่องมีได้สูงสุด ${cap} คาบ จึงต้องแบ่งเป็น ${k} ช่วง`);
+      }
       u.multi = sizes.length > 1;
       for (const size of sizes) this.addPiece(u, size);
     }
@@ -329,7 +333,16 @@ export class SchedulerEngine {
   private unitCost(u: Unit, di: number): number {
     if (!u.multi) return 0;
     const c = this.unitDay[u.idx * this.nDays + di];
-    return c > 1 ? (WEIGHTS.spread * c * (c - 1)) / 2 : 0;
+    if (c <= 1) return 0;
+    let cost = (WEIGHTS.spread * c * (c - 1)) / 2;
+    // ช่วงของวิชาเดียวกัน 2 ช่วงวางชิดกัน (ไม่คั่นพักเที่ยง) จะกลายเป็นช่วงยาวเกินกำหนด -> ปรับหนัก
+    const o = this.occ[u.res[0]], base = di * this.nP;
+    for (let k = 1; k < this.nP; k++) {
+      if (k === this.lunch) continue;
+      const a = o[base + k - 1], b = o[base + k];
+      if (a !== 0 && b !== 0 && a !== b && this.pieces[a - 1].unit === u && this.pieces[b - 1].unit === u) cost += WEIGHTS.joined;
+    }
+    return cost;
   }
 
   private local(ps: Piece[], days: number[]): number {
