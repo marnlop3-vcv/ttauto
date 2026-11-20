@@ -29,6 +29,11 @@ for (const size of ['small', 'medium', 'large']) {
   };
 }
 console.log(JSON.stringify(S));
+// Greedy ล้วน (ตัวอย่างใหญ่) วางได้กี่คาบ — วัดจริงใน results.json (collect-greedy-only.ts)
+const GL = (R.greedyOnly || []).find((x) => x.key === 'large');
+const GTOT = GL ? GL.runs[0].total : 0;
+const GMIN = GL ? Math.min(...GL.runs.map((r) => r.greedyOnly)) : 0;
+const GMAX = GL ? Math.max(...GL.runs.map((r) => r.greedyOnly)) : 0;
 
 // ---------- ธีม ----------
 const THEME = {
@@ -229,8 +234,8 @@ const SOFT = HEX.lt2;
     T(s, [{ text: '✕ ', options: { bold: true, color: RED } }, { text: 'ชน = วางไม่ได้     ', options: { color: C.text1 } }, { text: '+n ', options: { bold: true } }, { text: 'คะแนนความไม่สวยที่เพิ่มขึ้น', options: { color: C.text1 } }], { x: 6.85, y: 5.35, w: 5.7, h: 0.5, fontSize: 13 });
     // ผลจริง
     s.addShape(SH.ROUNDED_RECTANGLE, { x: 0.6, y: 6.35, w: 12.1, h: 0.5, rectRadius: 0.1, fill: { color: 'DCE8F5' }, line: { color: 'DCE8F5', width: 0 } });
-    T(s, [{ text: 'ผลจริง: ', options: { bold: true, color: C.text2 } }, { text: `ตารางแรกครบทุกคาบ (${S.large.periods} คาบ) ภายใน < 0.1 วินาที — แต่ยังไม่สวย`, options: { color: C.text1 } }], { x: 0.85, y: 6.35, w: 11.6, h: 0.5, fontSize: 16 });
-    s.addNotes('ขั้นที่ 1 Greedy: เรียงชิ้นงานที่ยากก่อน (ยากคือกินหลายคาบและเกี่ยวกับหลายทรัพยากร) แล้ววางทีละชิ้นลงช่องที่ไม่ชน และเพิ่มคะแนนความไม่สวยน้อยที่สุด ข้อดีคือเร็วมาก ได้ตารางแรกครบทุกคาบในเสี้ยววินาที ข้อเสียคือเป็นการตัดสินใจทีละจุด ยังไม่มองภาพรวม จึงยังไม่สวยและบางชิ้นอาจวางไม่ลง ซึ่งส่งต่อให้ขั้นซ่อม');
+    T(s, [{ text: 'ผลจริง: ', options: { bold: true, color: C.text2 } }, { text: `ตัวอย่างใหญ่: Greedy ล้วนวางได้ ${GMIN}–${GMAX} จาก ${GTOT} คาบ → ซ่อมต่อครบ (รวม < 0.1 วินาที) แต่ยังไม่สวย`, options: { color: C.text1 } }], { x: 0.85, y: 6.35, w: 11.6, h: 0.5, fontSize: 15 });
+    s.addNotes('ขั้นที่ 1 Greedy: เรียงชิ้นงานที่ยากก่อน (ยากคือกินหลายคาบและเกี่ยวกับหลายทรัพยากร) แล้ววางทีละชิ้นลงช่องที่ไม่ชน และเพิ่มคะแนนความไม่สวยน้อยที่สุด ข้อดีคือเร็วมาก ข้อเสียคือเป็นการตัดสินใจทีละจุด ไม่ย้อนกลับไปแก้ชิ้นที่วางแล้ว จึงยังไม่สวย และเมื่อช่องเริ่มแน่น บางชิ้นจะวางไม่ลงและค้างในคิว (ตัวอย่างใหญ่ Greedy ล้วนวางได้ประมาณ ${GMIN} ถึง ${GMAX} จาก ${GTOT} คาบ) ซึ่งส่งต่อให้ขั้นซ่อม ตัวเลข "ครบทุกคาบในเสี้ยววินาที" คือผลหลัง Greedy กับซ่อมรวมกัน ไม่ใช่ Greedy อย่างเดียว');
   }
 
   // ============ 5) Ejection Chain + Tabu ============
@@ -311,8 +316,8 @@ const SOFT = HEX.lt2;
     const s = pres.addSlide({ masterName: 'CONTENT' });
     s.addText('ทำงานต่อกันเป็นวงจร: เร็ว → ครบ → สวย', { placeholder: 'title' });
     const segs = [
-      { x: 0.6, w: 2.6, col: BLUE, t: 'Greedy', d: 'ตารางแรก < 0.1 วินาที', k: 'เร็ว' },
-      { x: 3.3, w: 2.6, col: AMBER, t: 'Ejection + Tabu', d: 'ซ่อมชิ้นที่ค้าง', k: 'ครบ' },
+      { x: 0.6, w: 2.6, col: BLUE, t: 'Greedy', d: 'ร่างแรก วางได้เกือบหมด', k: 'เร็ว' },
+      { x: 3.3, w: 2.6, col: AMBER, t: 'Ejection + Tabu', d: 'ซ่อมจนครบ (รวม < 0.1 วินาที)', k: 'ครบ' },
       { x: 6.0, w: 6.7, col: GREEN, t: 'Simulated Annealing', d: 'ย้าย/สลับ ลดคะแนนความไม่สวย (ใช้เวลาส่วนใหญ่)', k: 'สวย' },
     ];
     segs.forEach((sg) => {
@@ -353,7 +358,7 @@ const SOFT = HEX.lt2;
       T(s, [{ text: `ตัวอย่าง${name}`, options: { bold: true, color: C.text2 } }, { text: `  ${d.groups} กลุ่ม • ${d.periods} คาบ`, options: { color: GRAY, fontSize: 13 } }], { x: x + 0.25, y: 1.7, w: 3.5, h: 0.5, fontSize: 17 });
       T(s, [{ text: '100%', options: { fontSize: 34, bold: true, color: GREEN } }, { text: ' วางครบ', options: { fontSize: 15, color: C.text1 } }], { x: x + 0.25, y: 2.2, w: 3.5, h: 0.7 });
       T(s, [{ text: `ชน ${d.conflicts}`, options: { bold: true, color: GREEN, fontSize: 20 } }, { text: '   •   ', options: { color: GRAY } }, { text: `${d.sec.toFixed(1)} วินาที`, options: { bold: true, color: C.text2, fontSize: 20 } }], { x: x + 0.25, y: 2.95, w: 3.5, h: 0.5, fontSize: 16 });
-      T(s, `ตารางแรกครบใน < 0.1 วินาที`, { x: x + 0.25, y: 3.4, w: 3.5, h: 0.35, fontSize: 12, color: GRAY });
+      T(s, `ร่างแรกครบ (Greedy+ซ่อม) < 0.1 วินาที`, { x: x + 0.25, y: 3.4, w: 3.5, h: 0.35, fontSize: 11, color: GRAY });
     });
     const cats = keys.map(([k, n]) => `${n} (${S[k].periods} คาบ)`);
     const chartOpts = (x, title) => ({
@@ -370,7 +375,7 @@ const SOFT = HEX.lt2;
       { name: 'ก่อนปรับ (Greedy + ซ่อม)', labels: cats, values: keys.map(([k]) => S[k].tB) },
       { name: 'หลังปรับ (Annealing)', labels: cats, values: keys.map(([k]) => S[k].tA) },
     ], chartOpts(6.8, `คาบว่างคั่นครู (น้อย = ดี) • ใหญ่ลด ${Math.round((1 - S.large.tA / S.large.tB) * 100)}%`));
-    s.addNotes(`ผลการรันจริง (เฉลี่ย 2 รอบ, เครื่อง ${R.machine.cpus} คอร์): ตัวอย่างเล็ก ${S.small.periods} คาบ, กลาง ${S.medium.periods} คาบ, ใหญ่ ${S.large.periods} คาบ ทุกขนาดวางครบ 100% และตรวจแล้วไม่มีครู/กลุ่ม/ห้องชนกันเลย (ตรวจด้วยโค้ดแยกอิสระ) ตารางแรกที่ครบได้ภายในเสี้ยววินาที จากนั้นขั้นปรับให้สวยลดคาบว่างคั่นของนักเรียนจาก ${S.large.gB} เหลือ ${S.large.gA} (ตัวอย่างใหญ่) และของครูจาก ${S.large.tB} เหลือ ${S.large.tA} ระบบจบเองเมื่อคะแนนไม่ดีขึ้นอีก (ตั้งเวลาสูงสุดไว้ ${R.runs[0].limitSec}/${R.runs[2].limitSec}/${R.runs[4].limitSec} วินาที) ตัวเลขเวลาจัดมือของโรงเรียนจริงไม่ได้วัดไว้ จึงไม่นำมาเทียบ`);
+    s.addNotes(`ผลการรันจริง (เฉลี่ย 2 รอบ, เครื่อง ${R.machine.cpus} คอร์): ตัวอย่างเล็ก ${S.small.periods} คาบ, กลาง ${S.medium.periods} คาบ, ใหญ่ ${S.large.periods} คาบ ทุกขนาดวางครบ 100% และตรวจแล้วไม่มีครู/กลุ่ม/ห้องชนกันเลย (ตรวจด้วยโค้ดแยกอิสระ) ร่างแรกที่ครบ (หลัง Greedy กับซ่อม) ได้ภายในเสี้ยววินาที จากนั้นขั้นปรับให้สวยลดคาบว่างคั่นของนักเรียนจาก ${S.large.gB} เหลือ ${S.large.gA} (ตัวอย่างใหญ่) และของครูจาก ${S.large.tB} เหลือ ${S.large.tA} ระบบจบเองเมื่อคะแนนไม่ดีขึ้นอีก (ตั้งเวลาสูงสุดไว้ ${R.runs[0].limitSec}/${R.runs[2].limitSec}/${R.runs[4].limitSec} วินาที) ตัวเลขเวลาจัดมือของโรงเรียนจริงไม่ได้วัดไว้ จึงไม่นำมาเทียบ`);
   }
 
   // ============ 9) จากข้อมูลสู่ผู้ใช้ ============
@@ -408,7 +413,7 @@ const SOFT = HEX.lt2;
     const cols = [
       ['FaLayerGroup', 'ครบ', 'รองรับเงื่อนไขจริง: ครูชื่อซ้ำ เรียนรวม/แยก กรณีพิเศษ คาบติดกัน', BLUE],
       ['FaCheckDouble', 'ถูกต้อง', 'ครู กลุ่ม ห้อง ไม่ชนเลย • ผ่านการทดสอบอัตโนมัติ 85 รายการ', GREEN],
-      ['FaBolt', 'เร็ว', `${S.large.periods} คาบ ใน ~${Math.round(S.large.sec)} วินาที • ตารางแรกใน < 0.1 วินาที`, AMBER],
+      ['FaBolt', 'เร็ว', `${S.large.periods} คาบ ใน ~${Math.round(S.large.sec)} วินาที • ร่างแรกครบใน < 0.1 วินาที`, AMBER],
     ];
     for (let i = 0; i < cols.length; i++) {
       const x = 0.6 + i * 4.1;

@@ -660,5 +660,127 @@
         }
       ]
     }
+  ],
+  "greedyOnly": [
+    {
+      "key": "small",
+      "label": "ตัวอย่างเล็ก",
+      "runs": [
+        {
+          "seed": 1,
+          "total": 62,
+          "greedyOnly": 62,
+          "afterRepair": 62,
+          "final": 64,
+          "finalTotal": 64,
+          "unplacedFinal": 0
+        },
+        {
+          "seed": 2,
+          "total": 62,
+          "greedyOnly": 62,
+          "afterRepair": 62,
+          "final": 64,
+          "finalTotal": 64,
+          "unplacedFinal": 0
+        }
+      ]
+    },
+    {
+      "key": "medium",
+      "label": "ตัวอย่างกลาง",
+      "runs": [
+        {
+          "seed": 1,
+          "total": 252,
+          "greedyOnly": 252,
+          "afterRepair": 252,
+          "final": 264,
+          "finalTotal": 264,
+          "unplacedFinal": 0
+        },
+        {
+          "seed": 2,
+          "total": 252,
+          "greedyOnly": 252,
+          "afterRepair": 252,
+          "final": 264,
+          "finalTotal": 264,
+          "unplacedFinal": 0
+        }
+      ]
+    },
+    {
+      "key": "large",
+      "label": "ตัวอย่างใหญ่",
+      "runs": [
+        {
+          "seed": 1,
+          "total": 690,
+          "greedyOnly": 686,
+          "afterRepair": 690,
+          "final": 720,
+          "finalTotal": 720,
+          "unplacedFinal": 0
+        },
+        {
+          "seed": 2,
+          "total": 690,
+          "greedyOnly": 688,
+          "afterRepair": 690,
+          "final": 720,
+          "finalTotal": 720,
+          "unplacedFinal": 0
+        }
+      ]
+    },
+    {
+      "key": "tight12",
+      "label": "ข้อมูลแน่น 12 กลุ่ม 14 ครู",
+      "runs": [
+        {
+          "seed": 1,
+          "total": 312,
+          "greedyOnly": 300,
+          "afterRepair": 304,
+          "final": 308,
+          "finalTotal": 312,
+          "unplacedFinal": 1
+        },
+        {
+          "seed": 2,
+          "total": 312,
+          "greedyOnly": 300,
+          "afterRepair": 308,
+          "final": 308,
+          "finalTotal": 312,
+          "unplacedFinal": 1
+        }
+      ]
+    },
+    {
+      "key": "tight24",
+      "label": "ข้อมูลแน่น 24 กลุ่ม 28 ครู",
+      "runs": [
+        {
+          "seed": 1,
+          "total": 624,
+          "greedyOnly": 604,
+          "afterRepair": 612,
+          "final": 623,
+          "finalTotal": 624,
+          "unplacedFinal": 1
+        },
+        {
+          "seed": 2,
+          "total": 624,
+          "greedyOnly": 614,
+          "afterRepair": 620,
+          "final": 623,
+          "finalTotal": 624,
+          "unplacedFinal": 1
+        }
+      ]
+    }
   ]
 }
